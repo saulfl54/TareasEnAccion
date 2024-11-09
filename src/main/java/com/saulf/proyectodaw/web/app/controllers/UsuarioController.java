@@ -14,6 +14,7 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import com.saulf.proyectodaw.web.app.models.entity.Usuario;
 import com.saulf.proyectodaw.web.app.models.service.IUsuarioService;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.validation.Valid;
 
@@ -40,13 +41,18 @@ public class UsuarioController {
 	}
 	
 	@RequestMapping(value="/form/{id}")
-	public String editar(@PathVariable(value="id") Long id, Map<String, Object> model) {
+	public String editar(@PathVariable(value="id") Long id, Map<String, Object> model,RedirectAttributes flash) {
 		
 		Usuario usuario = null;
 		
 		if(id > 0) {
 			usuario = usuarioService.findOne(id);
+			if (usuario == null) {
+				flash.addFlashAttribute("error", "El identificador del cliente no se encuentra en la BBDD!");
+				return "redirect:/listar";
+			}
 		} else {
+			flash.addFlashAttribute("error", "El identificador del usuario no puede ser cero!");
 			return "redirect:/usuario/listar";
 		}
 		model.put("usuario", usuario);
@@ -55,22 +61,26 @@ public class UsuarioController {
 	}
 	
 	@RequestMapping(value = "/form", method = RequestMethod.POST)
-	public String guardar(@Valid Usuario usuario, BindingResult result, Model model, SessionStatus status) {
+	public String guardar(@Valid Usuario usuario, BindingResult result, Model model,RedirectAttributes flash, SessionStatus status) {
 		if(result.hasErrors()) {
 			model.addAttribute("titulo", "Formulario de Usuario");
 			return "form";
+			
 		}
+		String mensajeFlash = (usuario.getId() != null) ? "Usuario editado con éxito!" : "Usuario creado con éxito!";
 		
 		usuarioService.save(usuario);
 		status.setComplete();
+		flash.addFlashAttribute("success", mensajeFlash); 
 		return "redirect:/usuario/listar";
 	}
 	
 	@RequestMapping(value="/eliminar/{id}")
-	public String eliminar(@PathVariable(value="id") Long id) {
+	public String eliminar(@PathVariable(value="id") Long id, RedirectAttributes flash) {
 		
 		if(id > 0) {
 			usuarioService.delete(id);
+			flash.addFlashAttribute("success", "Usuario eliminado con éxito!");
 		}
 		return "redirect:/usuario/listar";
 	}

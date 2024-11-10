@@ -44,7 +44,7 @@ public class Usuario implements Serializable {
 	public void prePersist() {
 		createAt=new Date();
 	}
-	
+	@Column(name = "foto")
 	private String foto;
 	public Long getId() {
 		return id;

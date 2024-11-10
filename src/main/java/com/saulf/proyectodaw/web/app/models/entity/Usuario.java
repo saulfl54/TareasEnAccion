@@ -2,12 +2,16 @@ package com.saulf.proyectodaw.web.app.models.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -16,7 +20,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 
 @Entity
-@Table(name = "users")
+@Table(name = "usuarios")
 public class Usuario implements Serializable {
 	
 	@Id
@@ -35,6 +39,12 @@ public class Usuario implements Serializable {
 	@NotEmpty
 	@Email
 	private String email;
+
+	@Column(name = "foto")
+	private String foto;
+	
+	@OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<Tarea> tareas;
 	
 	@Temporal(TemporalType.DATE)
 	@Column(name = "create_at")
@@ -44,8 +54,7 @@ public class Usuario implements Serializable {
 	public void prePersist() {
 		createAt=new Date();
 	}
-	@Column(name = "foto")
-	private String foto;
+	
 	public Long getId() {
 		return id;
 	}
@@ -99,6 +108,15 @@ public class Usuario implements Serializable {
 	}
 	public void setFoto(String foto) {
 		this.foto = foto;
+	}
+	public List<Tarea> getTareas() {
+		return tareas;
+	}
+	public void setTareas(List<Tarea> tareas) {
+		this.tareas = tareas;
+	}
+	public void addTarea(Tarea tarea) {
+		tareas.add(tarea);
 	}
 	/**
 	 * 

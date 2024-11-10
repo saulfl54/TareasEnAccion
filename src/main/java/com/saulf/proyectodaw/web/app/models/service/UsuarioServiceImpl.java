@@ -1,15 +1,21 @@
 package com.saulf.proyectodaw.web.app.models.service;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.saulf.proyectodaw.web.app.models.dao.IUsuarioDao;
 import com.saulf.proyectodaw.web.app.models.entity.Usuario;
 
+
+
 @Service
 public class UsuarioServiceImpl implements IUsuarioService{
+
 	@Autowired
 	private IUsuarioDao usuarioDao;
 	
@@ -37,4 +43,12 @@ public class UsuarioServiceImpl implements IUsuarioService{
 		usuarioDao.deleteById(id);
 		
 	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Page<Usuario> findAll(Pageable pageable) {
+		
+		return usuarioDao.findAll(pageable);
+	}
+
 }

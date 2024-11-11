@@ -8,7 +8,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.saulf.proyectodaw.web.app.models.dao.IComentarioDao;
+import com.saulf.proyectodaw.web.app.models.dao.ITareaDao;
 import com.saulf.proyectodaw.web.app.models.dao.IUsuarioDao;
+import com.saulf.proyectodaw.web.app.models.entity.Comentario;
+import com.saulf.proyectodaw.web.app.models.entity.Tarea;
 import com.saulf.proyectodaw.web.app.models.entity.Usuario;
 
 
@@ -18,6 +22,12 @@ public class UsuarioServiceImpl implements IUsuarioService{
 
 	@Autowired
 	private IUsuarioDao usuarioDao;
+	
+	@Autowired
+	private ITareaDao tareaDao;
+	
+	@Autowired
+	private IComentarioDao comentarioDao;
 	
 	@Override
 	@Transactional(readOnly = true)
@@ -49,6 +59,33 @@ public class UsuarioServiceImpl implements IUsuarioService{
 	public Page<Usuario> findAll(Pageable pageable) {
 		
 		return usuarioDao.findAll(pageable);
+	}
+	@Override
+	@Transactional
+	public void saveTarea(Tarea tarea) {
+		tareaDao.save(tarea);
+	}
+	@Override
+	@Transactional(readOnly = true)
+	public Tarea findTareaById(Long id) {
+		return tareaDao.findById(id).orElse(null);
+	}
+	@Override
+	@Transactional
+	public void deleteTarea(Long id) {
+		tareaDao.deleteById(id);
+	}
+	
+	@Override
+	@Transactional
+	public void saveComentario(Comentario comentario) {
+		comentarioDao.save(comentario);	
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Page<Tarea> findAllTareas(Pageable pageable) {
+		return tareaDao.findAll(pageable);
 	}
 
 }

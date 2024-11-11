@@ -18,6 +18,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "tareas")
@@ -30,7 +31,9 @@ public class Tarea {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@NotEmpty
 	private String titulo;
+	@NotEmpty
 	private String contenido;
 	@Column(name = "imagen")
 	private String imagen;
@@ -87,6 +90,12 @@ public class Tarea {
 	}
 	public void setCreateAt(Date createAt) {
 		this.createAt = createAt;
+	}
+	public Usuario getUsuario() {
+		return usuario;
+	}
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 	private static final long serialVersionUID = 1L;
 }

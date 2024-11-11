@@ -46,6 +46,9 @@ public class Usuario implements Serializable {
 	@OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Tarea> tareas;
 	
+	@OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<Comentario> comentarios;
+	
 	@Temporal(TemporalType.DATE)
 	@Column(name = "create_at")
 	private Date createAt;

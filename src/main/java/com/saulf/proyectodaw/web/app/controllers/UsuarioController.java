@@ -146,7 +146,7 @@ public class UsuarioController {
 			return "redirect:/listar";
 		}
 		model.put("usuario", usuario);
-		model.put("titulo", "Detalle usuario: " + usuario.getNombre());
+		model.put("titulo", "Perfil de " + usuario.getUsername());
 		return "ver";
 	}
 }

@@ -1,30 +1,74 @@
-INSERT INTO usuarios (username,password, nombre, apellido, email, create_at) VALUES('Paquin','1234','Paco', 'Fernandez', 'paco@proyecto.com', '2022-11-10');
 
-INSERT INTO usuarios (username,password, nombre, apellido, email, create_at) VALUES('saulin','1234','Saúl', 'Gutierrez', 'saul@proyecto.com', '2022-11-10');
+INSERT INTO usuarios (username,password, nombre, apellido, email, create_at, enabled) VALUES('administrador','$2a$10$MjAHK5yRLoJFeB3.HUQJYOJr/BTSad2GqoN/odx0vC49b2wp6pSwW','administrador', 'administrador', 'admin@proyecto.com', '2022-11-10', 1);
 
-INSERT INTO usuarios (username,password, nombre, apellido, email, create_at ) VALUES('marianin','1234','Mariano', 'Dominguez', 'mariano@proyecto.com', '2022-11-10');
+INSERT INTO usuarios (username,password, nombre, apellido, email, create_at, enabled) VALUES('saulPrensa','$2a$10$MjAHK5yRLoJFeB3.HUQJYOJr/BTSad2GqoN/odx0vC49b2wp6pSwW','Saúl', 'Fernández', 'saul@proyecto.com', '2022-11-10', 1);
 
-INSERT INTO usuarios (username,password, nombre, apellido, email, create_at ) VALUES('beita','1234','Beatriz', 'Bernabeu', 'bea@proyecto.com', '2022-11-11');
+INSERT INTO usuarios (username,password, nombre, apellido, email, create_at, enabled) VALUES('luciaMarketing','$2a$10$MjAHK5yRLoJFeB3.HUQJYOJr/BTSad2GqoN/odx0vC49b2wp6pSwW','Lucia', 'Bernabeu', 'lucia@proyecto.com', '2022-11-10', 1);
 
-INSERT INTO usuarios (username,password, nombre, apellido, email, create_at ) VALUES('lore','1234','Lorena', 'Savedra', 'lorena@proyecto.com', '2022-11-11');
+INSERT INTO usuarios (username,password, nombre, apellido, email, create_at, enabled) VALUES('marianoDom','$2a$10$DOMDxjYyfZ/e7RcBfUpzqeaCs8pLgcizuiQWXPkU35nOhZlFcE9MS','Mariano', 'Dominguez', 'mar@proyecto.com', '2022-11-10', 1);
 
-INSERT INTO usuarios (username,password, nombre, apellido, email,create_at ) VALUES('antonin','1234','Antonio', 'Martinez', 'antonio@proyecto.com', '2022-11-11');
+INSERT INTO usuarios (username,password, nombre, apellido, email, create_at, enabled) VALUES('beatrizBer','$2a$10$DOMDxjYyfZ/e7RcBfUpzqeaCs8pLgcizuiQWXPkU35nOhZlFcE9MS','Beatriz', 'Bernabeu', 'bea@proyecto.com', '2022-11-11',1);
 
-INSERT INTO usuarios (username,password, nombre, apellido, email, create_at ) VALUES('mariita','1234','María', 'Guzman', 'maria@proyecto.com', '2022-11-12');
+INSERT INTO usuarios (username,password, nombre, apellido, email, create_at, enabled ) VALUES('lorenaSav','$2a$10$DOMDxjYyfZ/e7RcBfUpzqeaCs8pLgcizuiQWXPkU35nOhZlFcE9MS','Lorena', 'Savedra', 'lore@proyecto', '2022-11-11',1);
 
-INSERT INTO usuarios (username,password, nombre, apellido, email, create_at ) VALUES('adolfin','1234','Adolfo', 'de Lera', 'adolfo@proyecto.com','2022-11-12');
+INSERT INTO usuarios (username,password, nombre, apellido, email,create_at, enabled ) VALUES('antonioMar','$2a$10$DOMDxjYyfZ/e7RcBfUpzqeaCs8pLgcizuiQWXPkU35nOhZlFcE9MS','Antonio', 'Martinez', 'anton@proyecto', '2022-11-11',1);
 
-INSERT INTO usuarios (username,password, nombre, apellido, email, create_at) VALUES('vero','1234','Veronica', 'Guzman', 'vero@proyecto.com', '2022-11-12');
+INSERT INTO usuarios (username,password, nombre, apellido, email, create_at, enabled ) VALUES('mariaGuz','$2a$10$DOMDxjYyfZ/e7RcBfUpzqeaCs8pLgcizuiQWXPkU35nOhZlFcE9MS','María', 'Guzman', 'maria@proyecto', '2022-11-12',1);
 
-INSERT INTO usuarios (username,password, nombre, apellido, email, create_at) VALUES('albita','1234','Alba', 'Alvarez', 'alba@proyecto.com', '2022-11-12');
+INSERT INTO usuarios (username,password, nombre, apellido, email, create_at, enabled ) VALUES('adolfoLer','$2a$10$DOMDxjYyfZ/e7RcBfUpzqeaCs8pLgcizuiQWXPkU35nOhZlFcE9MS','Adolfo', 'de Lera', 'adolfo@proyecto','2022-11-12',1);
 
-INSERT INTO usuarios (username,password, nombre, apellido, email, create_at) VALUES('andresin','1234','Andres', 'Barbas', 'andresr@proyecto.com', '2022-11-13');
+INSERT INTO usuarios (username,password, nombre, apellido, email, create_at, enabled) VALUES('veroGuz','$2a$10$DOMDxjYyfZ/e7RcBfUpzqeaCs8pLgcizuiQWXPkU35nOhZlFcE9MS','Veronica', 'Guzman', 'vero@proyecto', '2022-11-12',1);
 
-INSERT INTO usuarios (username,password, nombre, apellido, email, create_at) VALUES('vicentina','1234','Vicenta', 'Fernández', 'vicenta@proyecto.com', '2022-11-13');
+INSERT INTO usuarios (username,password, nombre, apellido, email, create_at, enabled) VALUES('albaAlv','$2a$10$DOMDxjYyfZ/e7RcBfUpzqeaCs8pLgcizuiQWXPkU35nOhZlFcE9MS','Alba', 'Alvarez', 'alba@proyecto', '2022-11-12',1);
 
-INSERT INTO usuarios (username,password, nombre, apellido, email, create_at ) VALUES('quiquin','1234','Quique', 'Pozo', 'quiquin@proyecto.com', '2022-11-13');
-INSERT INTO usuarios (username,password, nombre, apellido, email, create_at ) VALUES('josin','1234','José', 'Rios', 'jose@proyecto.com', '2022-11-14');
-INSERT INTO usuarios (username,password, nombre, apellido, email , create_at) VALUES('joaqui','1234','Joaquina', 'Toledana', 'joaquina@proyecto.com', '2022-11-15');
-INSERT INTO tareas(usuario_id, titulo ,contenido, create_at) VALUES (1,'Esta es la primera tarea','Registrar el horario','2022-11-18');
-INSERT INTO comentarios (contenido,create_at,tarea_id,usuario_id) VALUES ('primer comentario','2022-11-18',1,2);
-INSERT INTO comentarios (contenido,create_at,tarea_id,usuario_id) VALUES ('segundo comentario','2022-11-18',1,3);
+INSERT INTO usuarios (username,password, nombre, apellido, email, create_at, enabled) VALUES('andresBar','$2a$10$DOMDxjYyfZ/e7RcBfUpzqeaCs8pLgcizuiQWXPkU35nOhZlFcE9MS','Andres', 'Barbas', 'andresr@proyecto.com', '2022-11-13',1);
+
+INSERT INTO usuarios (username,password, nombre, apellido, email, create_at, enabled) VALUES('vicentaFer','$2a$10$DOMDxjYyfZ/e7RcBfUpzqeaCs8pLgcizuiQWXPkU35nOhZlFcE9MS','Vicenta', 'Fernández', 'vicen@proyecto.com', '2022-11-13',1);
+
+INSERT INTO usuarios (username,password, nombre, apellido, email, create_at, enabled ) VALUES('quiquePoz','$2a$10$DOMDxjYyfZ/e7RcBfUpzqeaCs8pLgcizuiQWXPkU35nOhZlFcE9MS','Quique', 'Pozo', 'quin@proyecto', '2022-11-13',1);
+
+INSERT INTO usuarios (username,password, nombre, apellido, email, create_at, enabled ) VALUES('joseRio','$2a$10$DOMDxjYyfZ/e7RcBfUpzqeaCs8pLgcizuiQWXPkU35nOhZlFcE9MS','José', 'Rios', 'jose@proyecto', '2022-11-14',1);
+
+INSERT INTO usuarios (username,password, nombre, apellido, email , create_at, enabled) VALUES('joaquinaTol','$2a$10$DOMDxjYyfZ/e7RcBfUpzqeaCs8pLgcizuiQWXPkU35nOhZlFcE9MS','Joaquina', 'Toledanao', 'joa@proyecto', '2022-11-15',1);
+
+INSERT INTO tareas (usuario_id, titulo ,contenido, create_at) VALUES (16,'Bienvenida Joaquina','Joaquina se incorpora a la empresa como junior developer, bienvenida Joaquina','2022-11-15');
+
+
+
+INSERT INTO tareas (usuario_id, titulo ,contenido, create_at) VALUES (9,'Nuevo record de ventas mensual','nuestro comercial Adolfo de Lera finaliza el mes con 876 puntos, nuevo record mensual! ','2022-11-30');
+
+
+
+INSERT INTO tareas (usuario_id, titulo ,contenido, create_at) VALUES (2,'Mañana no es día laboral','Se recuerda a los empleados que mañana 8 de Diciembre, la empresa cumple 50 años desde su inauguración, no se trabaja, disfrutar del día libre!!!','2022-12-08');
+
+
+
+INSERT INTO roles (nombre, role) VALUES ('Usuario','ROLE_USER');
+INSERT INTO roles (nombre, role) VALUES ('Usuario avanzado','ROLE_ADVANCED_USER');
+INSERT INTO roles (nombre, role) VALUES ('Administrador','ROLE_ADMIN');
+
+
+
+INSERT INTO usuarios_roles (usuario_id, roles_id) VALUES (1,1);
+INSERT INTO usuarios_roles (usuario_id, roles_id) VALUES (1,2);
+INSERT INTO usuarios_roles (usuario_id, roles_id) VALUES (1,3);
+INSERT INTO usuarios_roles (usuario_id, roles_id) VALUES (2,1);
+INSERT INTO usuarios_roles (usuario_id, roles_id) VALUES (2,2);
+INSERT INTO usuarios_roles (usuario_id, roles_id) VALUES (3,1);
+INSERT INTO usuarios_roles (usuario_id, roles_id) VALUES (3,2);
+INSERT INTO usuarios_roles (usuario_id, roles_id) VALUES (4,1);
+INSERT INTO usuarios_roles (usuario_id, roles_id) VALUES (5,1);
+INSERT INTO usuarios_roles (usuario_id, roles_id) VALUES (6,1);
+INSERT INTO usuarios_roles (usuario_id, roles_id) VALUES (7,1);
+INSERT INTO usuarios_roles (usuario_id, roles_id) VALUES (8,1);
+INSERT INTO usuarios_roles (usuario_id, roles_id) VALUES (9,1);
+INSERT INTO usuarios_roles (usuario_id, roles_id) VALUES (10,1);
+INSERT INTO usuarios_roles (usuario_id, roles_id) VALUES (11,1);
+INSERT INTO usuarios_roles (usuario_id, roles_id) VALUES (12,1);
+INSERT INTO usuarios_roles (usuario_id, roles_id) VALUES (13,1);
+INSERT INTO usuarios_roles (usuario_id, roles_id) VALUES (14,1);
+INSERT INTO usuarios_roles (usuario_id, roles_id) VALUES (15,1);
+INSERT INTO usuarios_roles (usuario_id, roles_id) VALUES (16,1);
+
+
+

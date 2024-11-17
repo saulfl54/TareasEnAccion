@@ -5,9 +5,10 @@
 
 	<header th:replace="plantilla/plantilla :: header"></header>
 
-	<div class="container py-4">
+	<div class="container py-1">
 
 		<div class="card bg-dark">
+
 			<!-----------------------------TÍTULO -------------------------------------->
 			<div
 				class="card-header text-warning font-weight-bold N h2 text-center"
@@ -17,15 +18,7 @@
 				<!-----------------------FORMULARIO--------------------->
 				<form th:action="@{/usuario/form}" th:object="${usuario}"
 					method="post" enctype="multipart/form-data">
-					<div class="form-group row">
-						<label class="col-sm-3 col-form-label text-light text-right">Nombre</label>
-						<div class="col-sm-6">
-							<input type="text" th:field="*{nombre}" class="form-control"
-								th:errorclass="'form-control alert-danger'" /> <small
-								class="form-text text-danger"
-								th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></small>
-						</div>
-					</div>
+
 					<!-- --------------------------USERNAME ---------------------------------->
 					<div class="form-group row">
 						<label class="col-sm-3 col-form-label text-light text-right">Username</label>
@@ -36,6 +29,46 @@
 								th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></small>
 						</div>
 					</div>
+					<!----------------------------PASSWORD ---------------------------------->
+					<div class="form-group row">
+						<label for="password"
+							class="col-sm-3 col-form-label text-light text-right">Password</label>
+						<div class="col-sm-6">
+							<input type="password" th:field="*{password}" id="password"
+								class="form-control">	<small th:if="${#fields.hasErrors('password')}"
+							th:errors="*{password}" class="form-text text-danger"></small>
+								
+						</div>
+					
+
+					</div>
+
+					<!-----------------------------ROL------------------------------------>
+					<div class="form-group row text-light text-right">
+						<label class="col-sm-3 col-form-label text-light text-right">Roles</label>
+						<div th:each="role: ${listaRoles}">
+							<input class="mx-2" type="checkbox" th:field="*{roles}"
+								th:value="${role.id}" th:errorclass="'form-control alert-danger'" > <label
+								th:for="${#ids.prev('roles')}" th:text="${role.nombre}"></label>&nbsp;&nbsp;
+									
+						</div>
+						<small th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}" class="form-text text-danger"></small>
+					
+					</div>
+
+
+
+					<!----------------------------NOMBRE ----------------------------------------------->
+					<div class="form-group row">
+						<label class="col-sm-3 col-form-label text-light text-right">Nombre</label>
+						<div class="col-sm-6">
+							<input type="text" th:field="*{nombre}" class="form-control"
+								th:errorclass="'form-control alert-danger'" /> <small
+								class="form-text text-danger"
+								th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></small>
+						</div>
+					</div>
+
 					<!------------------------------APELLIDO ------------------------------------->
 					<div class="form-group row">
 						<label class="col-sm-3 col-form-label text-light text-right">Apellido</label>
@@ -46,7 +79,9 @@
 								th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}"></small>
 						</div>
 					</div>
+
 					<!-- ---------------------------EMAIL------------------------------------>
+
 					<div class="form-group row">
 						<label class="col-sm-3 col-form-label text-light text-right">Email</label>
 						<div class="col-sm-6">
@@ -58,6 +93,7 @@
 					</div>
 
 					<!-----------------------------FOTO--------------------------------->
+
 					<div class="form-group row">
 						<label for="file"
 							class="col-sm-3 col-form-label text-light text-right">FOTO</label>
@@ -65,6 +101,16 @@
 							<input type="file" name="file" class="form-control" />
 						</div>
 					</div>
+					
+						<!---------------------------HABILITAR------------------------------->
+					<div class="form-group row mx-2">
+						<label for="enabled" class="col-sm-3 col-form-label text-light text-right">Habilitar</label>
+						<div class="row col-sm-4">
+							<input type="checkbox" id="enabled" th:field="*{enabled}"
+								class="form-control col-sm-1">
+						</div>
+					</div>
+
 					<!-------------------------BOTÓN SUBMIT--------------------------->
 					<div class="form-group row">
 						<input type="submit" value="Guardar Usuario"
@@ -73,11 +119,12 @@
 				</form>
 				<!-----------------------FIN FORMULARIO--------------------->
 				<!--------------------BOTÓN VOLVER ------------------------>
-				<h4 class="card-title">
-					<a class="btn btn-light" th:href="@{'/usuario/listar/'}"
-						th:text="'&laquo; volver'"></a>
+				<h4 class="card-title mx-5">
+					<a class="btn btn-outline-light px-5"
+						th:href="@{'/usuario/listar/'}" th:text="'&laquo; volver'"></a>
 				</h4>
 			</div>
 		</div>
 	</div>
 	<footer th:replace="plantilla/plantilla :: footer"></footer>
+</body>

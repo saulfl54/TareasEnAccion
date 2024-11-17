@@ -1,106 +1,206 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="plantilla/plantilla :: head"></head>
 <body>
 
 	<header th:replace="plantilla/plantilla :: header"></header>
 
-	<div class="container py-4">
-
-
-		<div class="card bg-dark">
-			<!----------------------------------TÍTULO ----------------------------------------------->
-			<div
-				class="card-header text-warning font-weight-bold N h2 text-center"
-				th:text="${titulo}">
-				<p></p>
-			</div>
-
-			<div class="card-body text-center">
-				<!-------------------------------IMAGEN ---------------------------------------------->
-
-				<img th:if="${.imagen != null}" style="max-width: 90%;"
-					th:src="@{'/uploads/' + ${.imagen}}"
-					th:alt="${.imagen}" />
-			</div>
-
-			<!--------------------------------- CONTENIDO -------------------------------------------->
-
-			<div class="card-body">
-				<ul class="list-group mx-3">
-					<li class="list-group-item list-group-item-secondary"
-						th:text="${.createAt}"></li>
-					<li class="list-group-item"><p class="card-text"
-							th:text="${.contenido}"
-							th:if="${not #strings.isEmpty(.contenido)}"></p>
-						<h4 class="card-title"
-							th:if="${#strings.isEmpty(.contenido)}"
-							th:text="'No tiene Contenido'"></h4></li>
-				</ul>
-
-				<!------------------------------ COMENTARIOS -------------------------------------------->
-				<div th:if="${#lists.isEmpty(.comentarios)}">
-
-					<div class="alert alert-info my-4 mx-3"
-						th:text="'No hay comentarios en la  '"></div>
-					<form th:action="@{//comentar/} + ${.id}"
-						method="post">
-						<div class="col-sm-8">
-							<textarea name="contenido" id="contenido" class="form-control"
-								cols="40" rows="5"></textarea>
+	<div class="container py-1 h-100">
+		<div
+			class="row d-flex justify-content-center align-items-center h-100">
+			<div class="col-12 md-8 col-lg-10 col-xl-12">
+				<div class="card bg-dark" style="border-radius: 1rem;">
+					<div sec:authorize="hasRole('ROLE_ADVANCED_USER')" class="dropdown">
+						<button class="btn btn-link dropdown-toggle" type="button"
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<i class="fa fa-ellipsis-h"></i>
+						</button>
+						<!-------------- dropdown eliminar ------------------------------------>
+						<div class="dropdown-menu dropdown-menu-right">
+							<div class="h6 dropdown-header text-center">
+								<a th:href="@{/tarea/eliminar}+'/'+ ${tarea.id}"
+									th:text="'eliminar'"
+									onclick="return confirm('Estás seguro que deseas eliminar la tarea?');"></a>
+							</div>
 						</div>
-						<div class="form-group">
-							<input type="submit" th:value="Comentar"
-								class="btn btn-secondary mx-3 my-1" />
-						</div>
-					</form>
-				</div>
+					</div>
+					<div class="card-body text-center">
+						<!----------------------------------TÍTULO ----------------------------------------------->
 
-				<div th:if="${not #lists.isEmpty(.comentarios)}">
-					<div class="card-body bg-light mx-3">
 
-						<div th:each="comentario: ${.comentarios}"
-							class="bg-light">
-							<div class="card bg-light my-3 mx-3">
-								<strong class="px-3 pt-2"
-									th:text="${comentario.usuario.username} + ': '"></strong>
-								<p class="px-3" th:text="${comentario.contenido}"></p>
-								<p class="text-right px-4" th:text="${comentario.createAt}"></p>
+
+						<div class="card social-prof bg-dark">
+							<div class="card-body">
+								<div class="wrapper">
+
+
+									<!-------------------contenido tarea -------------------->
+									<h2 th:text="${titulo}" class="text-warning"></h2>
+									<div class="container">
+										<img class="img-fluid rounded mx-auto d-block "
+											style="width: 300px" th:if="${tarea.imagen != null}"
+											th:src="@{'/uploads/' + ${tarea.imagen}}"
+											th:alt="${tarea.imagen}" />
+
+									</div>
+									<p class="card-text text-light pt-2"
+										th:text="${tarea.contenido}"
+										th:if="${not #strings.isEmpty(tarea.contenido)}"></p>
+									<h3 class="card-title"
+										th:if="${#strings.isEmpty(tarea.contenido)}"
+										th:text="'No tiene Contenido'"></h3>
+								</div>
+
+								<div class="row  mb-5 pt-3">
+									<div class="col-lg-12">
+										<ul class=" nav nav-tabs justify-content-center s-nav">
+											
+											<li><a
+												th:if="${not #lists.isEmpty(tarea.comentarios)}"
+												href="#" class=" btn btn-outline-primary list-group-item list-group-item-action flex-column align-items-start text-primary bg-dark" onclick="myFunction()">&nbsp; &nbsp; ver <span
+													th:text="${tarea.comentarios.size}"></span>
+													comentario</a></li>
+
+										</ul>
+									</div>
+								</div>
+
 							</div>
 
 						</div>
 
-						<form th:action="@{//comentar/} + ${.id}"
-							method="post">
+						<!------------------------------------------ PERFIL ------------------------------------------------------------>
+						<div class="row">
+							<div class="col-lg-3">
+								<div class="card">
+									<div class="card-body">
 
-							<div class="col-sm-8">
-								<textarea name="contenido" id="contenido" class="form-control"
-									cols="40" rows="5"></textarea>
+										<div class="h5" th:text="${tarea.usuario.username}"></div>
+
+									</div>
+									<ul class="list-group list-group-flush">
+										<li class="list-group-item">
+											<div class="h6 text-muted">email</div>
+											<div class="h5" th:text="${tarea.usuario.email}"></div>
+										</li>
+										<li class="list-group-item">
+											<div class="h6 text-muted">registrado desde :</div>
+											<div class="h5" th:text="${tarea.usuario.createAt}"></div>
+										</li>
+
+									</ul>
+								</div>
 							</div>
+							<!------------------------------ Formulario comentario --------------------------------------------------->
+							<div class="col-lg-9">
 
-							<div class="form-group">
-								<input type="submit" th:value="Comentar"
-									class="btn btn-secondary mx-3 my-1" />
+								<div class="card social-timeline-card">
+									<div class="card-header">
+										<p class="text-left"></p>
+									</div>
+									<div class="card-body">
+										<div>
+											<div>
+												<form
+													th:action="@{/tarea/comentar/} + ${tarea.id}"
+													method="post">
+													<div>
+														<textarea name="contenido" id="contenido"
+															class="form-control" rows="3"
+															placeholder="Añade tu comentario"></textarea>
+													</div>
+
+													<div class="form-group">
+														<input type="submit" th:value="Comentar"
+															class="btn btn-secondary mx-3 mt-3" />
+
+													</div>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!---------------------------------------Comentarios --------------------------------------------------------->
+								<div th:if="${#lists.isEmpty(tarea.comentarios)}">
+
+									<div class="alert alert-info my-4 mx-3"
+										th:text="'No hay comentarios en la tarea '"></div>
+								</div>
+
+								<div class="card social-timeline-card" id="comentarios"
+									style="display: none">
+									<div th:each="comentario: ${tarea.comentarios}">
+										<div class="card-header">
+											<div
+												class="d-flex justify-content-between align-items-center">
+												<div
+													class="d-flex justify-content-between align-items-center">
+
+													<div class="ml-2">
+														<div class="h5" th:text="${comentario.usuario.username}"></div>
+														<div class="h7 text-muted"
+															th:text="${comentario.createAt}"></div>
+													</div>
+												</div>
+												<div>
+													<div class="dropdown"
+														sec:authorize="hasRole('ROLE_ADVANCED_USER')">
+														<button class="btn btn-link dropdown-toggle" type="button"
+															data-toggle="dropdown" aria-haspopup="true"
+															aria-expanded="false"></button>
+														<div class="dropdown-menu dropdown-menu-right">
+															<div class="h6 dropdown-header text-center">
+																<a
+																	th:href="@{/tarea/eliminarComentario/}+ ${comentario.id}+'/'+ ${tarea.id}"
+																	th:text="'eliminar'"
+																	onclick="return confirm('Estás seguro que deseas eliminar el comentario?');"></a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="card-body">
+												<p class="card-title text-left pl-5"
+													th:text="${comentario.contenido}"></p>
+											</div>
+										</div>
+									</div>
+								</div>
+
 							</div>
-						</form>
-
+						</div>
+						<br> <br>
+						<!-------------------------------------------------botones------------------------------------------>
+						<div class="row justify-content-between">
+							<div class="col-4">
+								<a class="btn btn-outline-light px-5"
+									th:href="@{'/usuario/ver/'} + ${tarea.usuario.id}"
+									th:text="'Perfil'"></a>
+							</div>
+							<div class="col-4">
+								<a class="btn btn-outline-light px-5"
+									th:href="@{'/tarea/listar'}" th:text="'Tareas'"></a>
+							</div>
+						</div>
 					</div>
 				</div>
-
-
-
-				<!-------------------------BOTÓN VOLVER ------------------------------------------------------->
-
-				<h4 class="card-title">
-
-					<a class="btn btn-light btn-xs my-5"
-						th:href="@{'/usuario/ver/' + ${.usuario.id}}"
-						th:text="'&laquo; volver'"></a>
-				</h4>
-
 			</div>
 		</div>
-
 	</div>
+<script>
+		function myFunction() {
+			var x = document.getElementById("comentarios");
+			if (x.style.display === "none") {
+				x.style.display = "block";
+			} else {
+				x.style.display = "none";
+			}
+		}
+	</script>
+
 	<footer th:replace="plantilla/plantilla :: footer"></footer>
+	
 </body>
+</html>

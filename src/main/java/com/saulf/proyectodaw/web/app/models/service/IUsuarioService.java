@@ -26,7 +26,15 @@ public interface IUsuarioService {
 	
 	void deleteTarea(Long id);
 	
-	public Page<Tarea> findAllTareas(Pageable pageable);
+	public List<Tarea> findAllOrderByCreateAtDes();
 	
-	public void saveComentario(Comentario comentario);
+	public void saveComentario(Comentario comentario, Usuario usuario, Tarea tarea);
+	
+	public Usuario findByUsername(String username);
+	
+	public Comentario findComentarioById(Long id);
+
+	public void deleteComentario(Long id);
+	
+	public Boolean isAdmin(Long id);
 }

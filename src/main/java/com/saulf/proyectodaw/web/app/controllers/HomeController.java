@@ -9,7 +9,7 @@ public class HomeController{
 	
 	@RequestMapping(value={"/","index","home"}, method=RequestMethod.GET)
 	public String index(Model modelo) {
-		modelo.addAttribute("titulo","Título pantalla principal");
+		modelo.addAttribute("titulo","Tareas en acción");
 		return "index";
 		
 	}

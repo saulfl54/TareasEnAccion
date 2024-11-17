@@ -1,45 +1,72 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="plantilla/plantilla :: head"></head>
 <body>
+
 	<header th:replace="plantilla/plantilla :: header"></header>
-	<div class="container py-4">
-		<div class="card bg-dark text-white">
-				<!----------------------------------TÍTULO ----------------------------------------------->
-			<div
-				class="card-header text-warning font-weight-bold N h2 text-center"
-				th:text="${titulo}"></div>
-				
-			<div class="card-body">
-			
-			<!-----------------ENLACE A CREAR TAREA-------------------------------------->
-				<h4 class="card-title text-center">
-					<a th:href="@{/tarea/form}" class="btn btn-secondary d-block">crear
-						tarea</a>
-				</h4>
-				
-				<!------------- LISTADO DE TAREAS----------------------------------------->
-				<table class="table table-striped my-5">
-					<tr class="text-light" th:each="tarea: ${tareas}">
-						<td th:text="${tarea.titulo}"></td>
-						<td th:text="${tarea.contenido}"></td>
-						<!---  botones listado -->
-						<td><a class="btn btn-secondary btn-xs"
-							th:href="@{/tarea/ver/} + ${tarea.id}" th:text="ver"></a></td>
-						<td><a class="btn btn-primary btn-sm"
-							th:href="@{/tarea/form/} + ${tarea.id}" th:text="'editar'"></a></td>
-						<td><a class="btn btn-danger btn-sm"
-							th:href="@{/tarea/eliminar/} + ${tarea.id}"
-							th:text="'eliminar'"
-							onclick="return confirm('Estás seguro que deseas eliminar la tarea?');"></a></td>
-						
-					</tr>
-				</table>
-				
+
+	<div class="container py-1 h-100">
+		<div
+			class="row d-flex justify-content-center align-items-center h-100">
+			<div class="col-12 md-8 col-lg-10 col-xl-12">
+				<div class="card bg-dark text-white" style="border-radius: 1rem;">
+					<div class="card-body p-5 text-center">
+
+
+
+
+						<!----------------------------------TÍTULO ----------------------------------------------->
+
+						<div
+							class="card-header text-warning font-weight-bold N h2 text-center"
+							th:text="${titulo}"></div>
+						<br>
+
+						<div class="card-body">
+
+
+							<!------------- LISTADO DE TAREAS------------------------------------------>
+
+							<div class="list-group">
+								<div
+									class=" btn btn-outline-light list-group-item list-group-item-action flex-column align-items-start text-white bg-dark"
+									th:each="tarea: ${tareas}">
+									<div class="d-flex w-100 justify-content-between">
+										<h4 class="mb-1 " th:text="${tarea.titulo}"></h4>
+										<small class="text-muted" th:text="${tarea.createAt}"></small>
+
+									</div>
+									<br> <a class="btn btn-outline-light border-0"
+										th:href="@{/tarea/ver/} + ${tarea.id}"
+										th:text="${tarea.contenido}"></a>
+
+
+								</div>
+								<br><br>
+							</div>
+
+							<div class="content">
+
+
+								<!--  <nav th:replace="plantilla/paginator-nav :: paginator"></nav>-->
+							</div>
+						</div>
+						<div class="row justify-content-between">
+							<div class="col-4">
+								<a class="btn btn-outline-light px-5" th:href="@{'/index'}"
+									th:text="'Principal'"></a>
+							</div>
+							<div class="col-4">
+								<a class="btn btn-outline-light px-5"
+									th:href="@{'/usuario/listar'}" th:text="'Usuarios'"></a>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
-			
-				<nav th:replace="paginator-nav :: paginator"></nav>
 		</div>
 	</div>
+
 	<footer th:replace="plantilla/plantilla :: footer"></footer>
 </body>

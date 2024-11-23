@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
- * Clase controller login 
+ * Clase controller login
+ * 
  * @author saulf
  *
  */
@@ -18,31 +19,32 @@ public class LoginController {
 
 	/**
 	 * Devuelve la vista login
-	 * @param error cuando hay error
-	 * @param logout cuando se hace logout
-	 * @param model el modelo de datos
+	 * 
+	 * @param error     cuando hay error
+	 * @param logout    cuando se hace logout
+	 * @param model     el modelo de datos
 	 * @param principal el usuario logueado
-	 * @param flash para lanzar los mensajes flash
+	 * @param flash     para lanzar los mensajes flash
 	 * @return la vista login
 	 */
 	@GetMapping("/login")
-	public String login(@RequestParam(value="error", required=false) String error,
-			@RequestParam(value="logout", required = false) String logout,
-			Model model, Principal principal, RedirectAttributes flash) {
-		
-		if(principal != null) {
+	public String login(@RequestParam(value = "error", required = false) String error,
+			@RequestParam(value = "logout", required = false) String logout, Model model, Principal principal,
+			RedirectAttributes flash) {
+
+		if (principal != null) {
 			flash.addFlashAttribute("info", "No puede iniciar sesión nuevamente");
-			return "redirect:/";//para evitar que haga doblemente inicio de sesión
+			return "redirect:/";// para evitar que haga doblemente inicio de sesión
 		}
-		
-		if(error != null) {
+
+		if (error != null) {
 			model.addAttribute("error", "Nombre de usuario o contraseña incorrecta, por favor vuelva a intentarlo!");
 		}
-		
-		if(logout != null) {
+
+		if (logout != null) {
 			model.addAttribute("success", "Ha cerrado sesión con éxito!");
 		}
-		
+
 		return "login";
 	}
 }

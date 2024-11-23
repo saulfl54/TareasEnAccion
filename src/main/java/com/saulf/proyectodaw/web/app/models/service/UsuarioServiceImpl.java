@@ -16,13 +16,6 @@ import com.saulf.proyectodaw.web.app.models.entity.Role;
 import com.saulf.proyectodaw.web.app.models.entity.Tarea;
 import com.saulf.proyectodaw.web.app.models.entity.Usuario;
 
-
-
-
-
-
-
-
 @Service
 public class UsuarioServiceImpl implements IUsuarioService {
 
@@ -53,6 +46,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 		usuarioDao.save(usuario);
 
 	}
+
 	/**
 	 * devuelve un usuario
 	 */
@@ -62,6 +56,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	public Usuario findOne(Long id) {
 		return usuarioDao.findById(id).orElse(null);
 	}
+
 	/**
 	 * borra un usuario
 	 */
@@ -72,6 +67,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 		usuarioDao.deleteById(id);
 
 	}
+
 	/**
 	 * devuelve una lista paginada de usuarios
 	 */
@@ -100,6 +96,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	public Tarea findTareaById(Long id) {
 		return tareaDao.findById(id).orElse(null);
 	}
+
 	/**
 	 * borra una tarea
 	 */
@@ -110,7 +107,6 @@ public class UsuarioServiceImpl implements IUsuarioService {
 		tareaDao.deleteById(id);
 	}
 
-
 	/**
 	 * devuelve una lista de tareas ordenada por fecha descendente
 	 */
@@ -120,34 +116,40 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	public List<Tarea> findAllOrderByCreateAtDes() {
 		return tareaDao.findAllOrderByCreateAtDes();
 	}
-	
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Tarea> findAllOrderByIdDesc() {
+		return tareaDao.findAllOrderByIdDesc();
+	}
+
 	/**
 	 * devuelve un usuario por su username
 	 */
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public Usuario findByUsername(String username) {
 		return usuarioDao.findByUsername(username);
 	}
-	
+
 	/**
 	 * si es admin devuelve true
 	 */
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public Boolean isAdmin(Long id) {
 		Usuario usuario = findOne(id);
-	
+
 		for (Role role : usuario.getRoles()) {
-			
-			if(role.getRole().equals("ROLE_ADMIN"))
+
+			if (role.getRole().equals("ROLE_ADMIN"))
 				return true;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * devuelve un comentario
 	 */
@@ -156,27 +158,27 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	public Comentario findComentarioById(Long id) {
 		return comentarioDao.findById(id).orElse(null);
 	}
+
 	/**
 	 * guarda un comentario
 	 */
 	@Override
 	@Transactional
 	public void saveComentario(Comentario comentario, Usuario usuario, Tarea tarea) {
-		
+
 		comentario.setUsuario(usuario);
 		tarea.addComentario(comentario);
-		comentarioDao.save(comentario);	
+		comentarioDao.save(comentario);
 	}
+
 	/**
 	 * borra un comentario
 	 */
-	
+
 	@Override
 	@Transactional
 	public void deleteComentario(Long id) {
 		comentarioDao.deleteById(id);
 	}
-	
-
 
 }

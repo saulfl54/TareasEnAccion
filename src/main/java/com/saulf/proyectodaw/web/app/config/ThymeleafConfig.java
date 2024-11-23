@@ -11,21 +11,21 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 @Configuration
 public class ThymeleafConfig {
 
-    @Bean
-    public SpringTemplateEngine templateEngine() {
-        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-        templateEngine.addDialect(new SpringSecurityDialect()); // Añadimos el dialecto de Spring Security
-        templateEngine.setTemplateResolver(templateResolver());
-        return templateEngine;
-    }
+	@Bean
+	public SpringTemplateEngine templateEngine() {
+		SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+		templateEngine.addDialect(new SpringSecurityDialect()); // Añadimos el dialecto de Spring Security
+		templateEngine.setTemplateResolver(templateResolver());
+		return templateEngine;
+	}
 
-    @Bean
-    public ITemplateResolver templateResolver() {
-        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setPrefix("templates/");
-        templateResolver.setSuffix(".html");
-        templateResolver.setTemplateMode("HTML");
-        templateResolver.setCharacterEncoding("UTF-8");
-        return templateResolver;
-    }
+	@Bean
+	public ITemplateResolver templateResolver() {
+		ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+		templateResolver.setPrefix("templates/");
+		templateResolver.setSuffix(".html");
+		templateResolver.setTemplateMode("HTML");
+		templateResolver.setCharacterEncoding("UTF-8");
+		return templateResolver;
+	}
 }

@@ -16,133 +16,102 @@
 							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							<i class="fa fa-ellipsis-h"></i>
 						</button>
-						<!-------------- dropdown eliminar ------------------------------------>
-						<div class="dropdown-menu dropdown-menu-right">
-							<div class="h6 dropdown-header text-center">
-								<a th:href="@{/tarea/eliminar}+'/'+ ${tarea.id}"
-									th:text="'eliminar'"
-									onclick="return confirm('Estás seguro que deseas eliminar la tarea?');"></a>
-							</div>
-						</div>
-					</div>
-					<div class="card-body text-center">
-						<!----------------------------------TÍTULO ----------------------------------------------->
-
-
-
-						<div class="card social-prof bg-dark">
-							<div class="card-body">
-								<div class="wrapper">
-
-
-									<!-------------------contenido tarea -------------------->
-									<h2 th:text="${titulo}" class="text-warning"></h2>
-									<div class="container">
-										<img class="img-fluid rounded mx-auto d-block "
-											style="width: 300px" th:if="${tarea.imagen != null}"
-											th:src="@{'/uploads/' + ${tarea.imagen}}"
-											th:alt="${tarea.imagen}" />
-
-									</div>
-									<p class="card-text text-light pt-2"
-										th:text="${tarea.contenido}"
-										th:if="${not #strings.isEmpty(tarea.contenido)}"></p>
-									<h3 class="card-title"
-										th:if="${#strings.isEmpty(tarea.contenido)}"
-										th:text="'No tiene Contenido'"></h3>
-								</div>
-
-								<div class="row  mb-5 pt-3">
-									<div class="col-lg-12">
-										<ul class=" nav nav-tabs justify-content-center s-nav">
-											
-											<li><a
-												th:if="${not #lists.isEmpty(tarea.comentarios)}"
-												href="#" class=" btn btn-outline-primary list-group-item list-group-item-action flex-column align-items-start text-primary bg-dark" onclick="myFunction()">&nbsp; &nbsp; ver <span
-													th:text="${tarea.comentarios.size}"></span>
-													comentario</a></li>
-
-										</ul>
-									</div>
-								</div>
-
-							</div>
-
-						</div>
-
-						<!------------------------------------------ PERFIL ------------------------------------------------------------>
 						<div class="row">
-							<div class="col-lg-3">
-								<div class="card">
-									<div class="card-body">
-
-										<div class="h5" th:text="${tarea.usuario.username}"></div>
-
+							<div class="col-lg-6">
+								<div class="dropdown-menu dropdown-menu-right">
+									<div class="h6 dropdown-header text-center">
+										<a th:href="@{/tarea/eliminar}+'/'+ ${tarea.id}"
+											th:text="'eliminar'"
+											onclick="return confirm('Estás seguro que deseas eliminar la tarea?');"></a>
 									</div>
-									<ul class="list-group list-group-flush">
-										<li class="list-group-item">
-											<div class="h6 text-muted">email</div>
-											<div class="h5" th:text="${tarea.usuario.email}"></div>
-										</li>
-										<li class="list-group-item">
-											<div class="h6 text-muted">registrado desde :</div>
-											<div class="h5" th:text="${tarea.usuario.createAt}"></div>
-										</li>
-
-									</ul>
 								</div>
 							</div>
-							<!------------------------------ Formulario comentario --------------------------------------------------->
-							<div class="col-lg-9">
+							<div class="col-lg-6 text-right" style="padding-right: 40px;">
+								<a href="#" class="text-decoration-none text-primary"
+									th:href="@{'/usuario/ver/' + ${tarea.usuario.id}}"
+									th:text="'#' + ${tarea.usuario.username}"> </a>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="card social-prof bg-dark">
+								<div class="card-body">
+									<div class="wrapper">
+										<h2 th:text="${titulo}" class="text-warning text-center"></h2>
+										<div class="container">
+											<img class="img-fluid rounded mx-auto d-block"
+												style="width: 300px" th:if="${tarea.imagen != null}"
+												th:src="@{'/uploads/' + ${tarea.imagen}}"
+												th:alt="${tarea.imagen}" />
+										</div>
+										<p class="card-text text-light pt-2"
+											th:text="${tarea.contenido}"
+											th:if="${not #strings.isEmpty(tarea.contenido)}"></p>
+										<h3 class="card-title"
+											th:if="${#strings.isEmpty(tarea.contenido)}"
+											th:text="'No tiene Contenido'"></h3>
+									</div>
 
+									<!-- Mostrar el botón de comentarios solo si hay comentarios -->
+									<div class="row m-3"
+										th:if="${not #lists.isEmpty(tarea.comentarios)}">
+										<div class="col-lg-12">
+											<ul class="nav justify-content-end s-nav">
+												<li><a href="#"
+													class="text-decoration-none text-primary"
+													id="toggleCommentsBtn" th:onclick="myFunction()"
+													th:text="${not #lists.isEmpty(tarea.comentarios) ? 'Ocultar comentarios' : 'Ver comentarios'}">
+												</a></li>
+											</ul>
+										</div>
+									</div>
+
+								</div>
+							</div>
+
+							<!-- Formulario de comentario -->
+							<div class="col-lg-12 mr-3">
 								<div class="card social-timeline-card">
-									<div class="card-header">
+									<div class="card-header p-0">
 										<p class="text-left"></p>
 									</div>
-									<div class="card-body">
+									<div class="card-body pb-0">
 										<div>
-											<div>
-												<form
-													th:action="@{/tarea/comentar/} + ${tarea.id}"
-													method="post">
-													<div>
-														<textarea name="contenido" id="contenido"
-															class="form-control" rows="3"
-															placeholder="Añade tu comentario"></textarea>
-													</div>
+											<form th:action="@{/tarea/comentar/} + ${tarea.id}"
+												method="post">
+												<div>
+													<textarea name="contenido" id="contenido"
+														class="form-control" rows="3"
+														placeholder="Añade tu comentario"></textarea>
+												</div>
 
-													<div class="form-group">
-														<input type="submit" th:value="Comentar"
-															class="btn btn-secondary mx-3 mt-3" />
-
-													</div>
-												</form>
-											</div>
+												<div class="form-group text-right">
+													<input type="submit" th:value="Comentar"
+														class="btn-sm btn-secondary mt-3" />
+												</div>
+											</form>
 										</div>
 									</div>
 								</div>
 
-								<!---------------------------------------Comentarios --------------------------------------------------------->
+								<!-- Sección de comentarios -->
 								<div th:if="${#lists.isEmpty(tarea.comentarios)}">
-
-									<div class="alert alert-info my-4 mx-3"
+									<div class="alert alert-info my-4 mx-6 text-center"
 										th:text="'No hay comentarios en la tarea '"></div>
 								</div>
 
-								<div class="card social-timeline-card" id="comentarios"
-									style="display: none">
+								<div class="card social-timeline-card mt-1" id="comentarios"
+									th:style="${not #lists.isEmpty(tarea.comentarios) ? 'display: block;' : 'display: none;'}">
 									<div th:each="comentario: ${tarea.comentarios}">
 										<div class="card-header">
 											<div
 												class="d-flex justify-content-between align-items-center">
-												<div
-													class="d-flex justify-content-between align-items-center">
-
-													<div class="ml-2">
-														<div class="h5" th:text="${comentario.usuario.username}"></div>
-														<div class="h7 text-muted"
-															th:text="${comentario.createAt}"></div>
-													</div>
+												<div class="ml-2">
+													<!-- Usuario -->
+													<a class="h7 text-decoration-none text-primary"
+														th:href="@{'/usuario/ver/' + ${comentario.usuario.id}}"
+														th:text="'#' + ${comentario.usuario.username}"> </a> <small
+														class="text-muted m-2"
+														th:text="${#dates.format(comentario.createAt, 'dd-MM-yyyy')}"></small>
 												</div>
 												<div>
 													<div class="dropdown"
@@ -161,9 +130,10 @@
 													</div>
 												</div>
 											</div>
-											<div class="card-body">
-												<p class="card-title text-left pl-5"
-													th:text="${comentario.contenido}"></p>
+											<div class="card-body"
+												style="background-color: #ffffff; border-radius: 10px; padding: 15px;">
+												<p class="card-title text-left"
+													th:utext="${comentario.contenido}" style="color: #343a40;"></p>
 											</div>
 										</div>
 									</div>
@@ -171,15 +141,11 @@
 
 							</div>
 						</div>
+
 						<br> <br>
-						<!-------------------------------------------------botones------------------------------------------>
-						<div class="row justify-content-between">
-							<div class="col-4">
-								<a class="btn btn-outline-light px-5"
-									th:href="@{'/usuario/ver/'} + ${tarea.usuario.id}"
-									th:text="'Perfil'"></a>
-							</div>
-							<div class="col-4">
+						<!-- Botón de redirección -->
+						<div class="row justify-content-center">
+							<div class="col-auto m-5">
 								<a class="btn btn-outline-light px-5"
 									th:href="@{'/tarea/listar'}" th:text="'Tareas'"></a>
 							</div>
@@ -189,18 +155,23 @@
 			</div>
 		</div>
 	</div>
-<script>
+
+	<script>
 		function myFunction() {
 			var x = document.getElementById("comentarios");
-			if (x.style.display === "none") {
+			var btn = document.getElementById("toggleCommentsBtn");
+
+			if (x.style.display === "none" || x.style.display === "") {
 				x.style.display = "block";
+				btn.textContent = "Ocultar comentarios";
 			} else {
 				x.style.display = "none";
+				btn.textContent = "Ver comentarios";
 			}
 		}
 	</script>
 
 	<footer th:replace="plantilla/plantilla :: footer"></footer>
-	
+
 </body>
 </html>

@@ -49,7 +49,7 @@ public class UsuarioController {
 
 	@Autowired
 	private ICargarArchivoService cargarArchivoService;
-	
+
 	@Autowired
 	private IRoleService roleService;
 
@@ -72,6 +72,7 @@ public class UsuarioController {
 
 	/**
 	 * método que devuelve una lista páginada con todos los usuarios.
+	 * 
 	 * @param page
 	 * @param model
 	 * @return vista lista
@@ -90,8 +91,10 @@ public class UsuarioController {
 		model.addAttribute("usuarios", usuarios);
 		return "usuario/listar";
 	}
+
 	/**
 	 * método que devuelve el formulario
+	 * 
 	 * @param model
 	 * @return vista form
 	 */
@@ -104,9 +107,10 @@ public class UsuarioController {
 		model.put("titulo", "Formulario de Usuario");
 		return "usuario/form";
 	}
-	
+
 	/**
 	 * método que devuelve el formulario con los datos del usuario
+	 * 
 	 * @param id
 	 * @param model
 	 * @param flash
@@ -134,8 +138,10 @@ public class UsuarioController {
 		model.put("titulo", "Editar Usuario");
 		return "usuario/form";
 	}
+
 	/**
 	 * método que crear un usuario, validando previamente sus campos
+	 * 
 	 * @param usuario
 	 * @param result
 	 * @param model
@@ -181,8 +187,10 @@ public class UsuarioController {
 		flash.addFlashAttribute("success", mensajeFlash);
 		return "redirect:/usuario/listar";
 	}
+
 	/**
 	 * método que elimina un usuario
+	 * 
 	 * @param id
 	 * @param flash
 	 * @return vista listar
@@ -216,8 +224,10 @@ public class UsuarioController {
 
 		return "redirect:/usuario/listar";
 	}
+
 	/**
 	 * método para mostrar una foto
+	 * 
 	 * @param filename
 	 * @return devuelve la respuesta con el recurso
 	 */
@@ -238,8 +248,10 @@ public class UsuarioController {
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"")
 				.body(recurso);
 	}
+
 	/**
 	 * método para ver los detalles del usuario.
+	 * 
 	 * @param id
 	 * @param model
 	 * @param flash
@@ -260,7 +272,6 @@ public class UsuarioController {
 		return "usuario/ver";
 	}
 
-	
 	@ModelAttribute("listaRoles")
 	public List<Role> listaRoles() {
 		return this.roleService.findAll();

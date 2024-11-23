@@ -16,8 +16,8 @@
 			<div class="card-body">
 
 				<!-----------------------FORMULARIO--------------------->
-				<form th:action="@{/tarea/form/}" th:object="${tarea}"
-					method="post" enctype="multipart/form-data">
+				<form th:action="@{'/tarea/form/' + ${tarea.usuario.id}}"
+					th:object="${tarea}" method="post" enctype="multipart/form-data">
 
 					<!-- -----------CAMPO DESHABILITADO NOMBRE CLIENTE----------->
 					<div class="form-group row">
@@ -45,7 +45,6 @@
 					</div>
 
 					<!---------------------------CONTENIDO--------------------------->
-
 					<div class="form-group row">
 						<label for="contenido"
 							class="col-sm-3 col-form-label text-light text-right"
@@ -56,12 +55,10 @@
 							<div class="invalid-feedback"
 								th:if="${#fields.hasErrors('contenido')}"
 								th:errors="*{contenido}"></div>
-
 						</div>
 					</div>
 
 					<!---------------------------IMAGEN--------------------------->
-
 					<div class="form-group row">
 						<label for="file"
 							class="col-sm-3 col-form-label text-light text-right"
@@ -79,14 +76,12 @@
 				</form>
 				<!-----------------------FIN FORMULARIO--------------------->
 
-
-				<!-------------------------BOTÓN VOLVER ------------------------------------------------------->
+				<!-------------------------BOTÓN VOLVER------------------------------------------------------>
 				<h4 class="card-title mx-5">
 					<a class="btn btn-outline-light px-5"
 						th:href="@{'/usuario/ver/' + ${tarea.usuario.id}}"
 						th:text="'&laquo; volver'"></a>
 				</h4>
-
 
 			</div>
 		</div>

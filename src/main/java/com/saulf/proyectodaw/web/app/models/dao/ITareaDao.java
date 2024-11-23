@@ -8,11 +8,12 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.saulf.proyectodaw.web.app.models.entity.Tarea;
 
-public interface ITareaDao extends PagingAndSortingRepository<Tarea, Long>, CrudRepository<Tarea, Long>{
+public interface ITareaDao extends PagingAndSortingRepository<Tarea, Long>, CrudRepository<Tarea, Long> {
 
-		@Query("SELECT p FROM Tarea p ORDER BY p.createAt desc")
-		List<Tarea> findAllOrderByCreateAtDes();
+	@Query("SELECT p FROM Tarea p ORDER BY p.createAt desc")
+	List<Tarea> findAllOrderByCreateAtDes();
 
-	}
+	@Query("SELECT p FROM Tarea p ORDER BY p.id DESC")
+	List<Tarea> findAllOrderByIdDesc();
 
-
+}

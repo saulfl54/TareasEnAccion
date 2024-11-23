@@ -12,23 +12,21 @@ public class Paginador<T> {
 
 	// CONSTRUCTOR
 
-	//recibe como parametro la url y la lista paginada
+	// recibe como parametro la url y la lista paginada
 	public Paginador(String url, Page<T> page) {
 		this.url = url;
 		this.page = page;
-		this.paginas = new ArrayList<PaginaItem>(); //inciamos la lista con paginaitem
-
+		this.paginas = new ArrayList<PaginaItem>(); // inciamos la lista con paginaitem
 
 		numElementosPorPagina = page.getSize();
 		totalPaginas = page.getTotalPages();
-		paginaActual = page.getNumber() + 1;//para que en vez 0 la primera sea 1
+		paginaActual = page.getNumber() + 1;// para que en vez 0 la primera sea 1
 		int desde, hasta;
 
-	
 		if (totalPaginas <= numElementosPorPagina) {
 			desde = 1;
 			hasta = totalPaginas;
-		} else {//3 rangos
+		} else {// 3 rangos
 			if (paginaActual <= numElementosPorPagina / 2) {
 				desde = 1;
 				hasta = numElementosPorPagina;
@@ -40,8 +38,8 @@ public class Paginador<T> {
 				hasta = numElementosPorPagina;
 			}
 		}
-		
-		//rellenamos la lista
+
+		// rellenamos la lista
 
 		for (int i = 0; i < hasta; i++) {
 			paginas.add(new PaginaItem(desde + i, paginaActual == desde + i));
@@ -49,9 +47,8 @@ public class Paginador<T> {
 
 	}
 	// ----------------Fin constructor-------------------------------
-	
-	
-	//Getter para poder acceder desde la vista.
+
+	// Getter para poder acceder desde la vista.
 
 	public String getUrl() {
 		return url;
@@ -68,8 +65,8 @@ public class Paginador<T> {
 	public List<PaginaItem> getPaginas() {
 		return paginas;
 	}
-	
-	//para crear un link a la primera, A la última, a la siguiente, a la anterior.
+
+	// para crear un link a la primera, A la última, a la siguiente, a la anterior.
 
 	public boolean isFirst() {
 		return page.isFirst();

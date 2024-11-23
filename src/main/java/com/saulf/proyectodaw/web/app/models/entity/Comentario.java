@@ -15,12 +15,9 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
-
-
-
 @Entity
 @Table(name = "comentarios")
-public class Comentario implements Serializable{
+public class Comentario implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,53 +35,41 @@ public class Comentario implements Serializable{
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	//@JoinColumn(name = "usuario_id") no es necesario.
+	// @JoinColumn(name = "usuario_id") no es necesario.
 	private Usuario usuario;
-	
 
 	public Long getId() {
 		return id;
 	}
 
-
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-
 
 	public String getContenido() {
 		return contenido;
 	}
 
-
-
 	public void setContenido(String contenido) {
 		this.contenido = contenido;
 	}
-
-
 
 	public Date getCreateAt() {
 		return createAt;
 	}
 
-
-
 	public void setCreateAt(Date createAt) {
 		this.createAt = createAt;
 	}
 
-	
 	public Usuario getUsuario() {
 		return usuario;
 	}
 
-
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
+
 	private static final long serialVersionUID = 1L;
 
 }

@@ -38,10 +38,11 @@ public class TareaController {
 	private IUsuarioService usuarioService;
 	@Autowired
 	private ICargarArchivoService cargarArchivoService;
-	
+
 	/**
 	 * 
 	 * devuelve la lista con todas las tareas
+	 * 
 	 * @param model
 	 * @return vista lista
 	 */
@@ -49,7 +50,7 @@ public class TareaController {
 	@RequestMapping(value = "/listar", method = RequestMethod.GET)
 	public String listar(Model model) {
 
-		List<Tarea> tareas = usuarioService.findAllOrderByCreateAtDes();
+		List<Tarea> tareas = usuarioService.findAllOrderByIdDesc();
 
 		model.addAttribute("titulo", "Tareas");
 
@@ -57,31 +58,29 @@ public class TareaController {
 
 		return "tarea/listar";
 	}
+
 	/**
 	 * devuelve el formulario para crear una tarea
+	 * 
 	 * @param usuarioId
 	 * @param model
 	 * @param flash
 	 * @return vista form
 	 */
 	@GetMapping("/form/{usuarioId}")
-	public String crear(@PathVariable(value = "usuarioId") Long usuarioId, Map<String, Object> model,
-			RedirectAttributes flash) {
-
+	public String crear(@PathVariable Long usuarioId, Model model, RedirectAttributes flash) {
 		Usuario usuario = usuarioService.findOne(usuarioId);
-
 		if (usuario == null) {
-			flash.addFlashAttribute("error", "El usuario no existe en la base de datos");
-			return "redirect:/listar";
+			flash.addFlashAttribute("error", "El usuario no existe.");
+			return "redirect:/usuario/listar";
 		}
 
 		Tarea tarea = new Tarea();
-		tarea.setUsuario(usuario);
+		tarea.setUsuario(usuario); // Asociamos el usuario a la tarea
+		model.addAttribute("tarea", tarea);
+		model.addAttribute("titulo", "Crear Tarea");
 
-		model.put("tarea", tarea);
-		model.put("titulo", "Crear Tarea");
-
-		return "tarea/form";
+		return "tarea/form"; // Retorna la vista del formulario
 	}
 
 	/**
@@ -95,20 +94,26 @@ public class TareaController {
 	 * @param file
 	 * @return vista listar
 	 */
-	@RequestMapping(value = "/form", method = RequestMethod.POST)
+	@RequestMapping(value = "/form/{usuarioId}", method = RequestMethod.POST)
 	public String guardar(@Valid Tarea tarea, BindingResult result, Model model, RedirectAttributes flash,
-			SessionStatus status, @RequestParam("file") MultipartFile file) {
+			SessionStatus status, @RequestParam("file") MultipartFile file, @PathVariable Long usuarioId) {
 
 		if (result.hasErrors()) {
 			model.addAttribute("titulo", "Crear Tarea");
 			return "tarea/form";
 		}
 
-		if (!file.isEmpty()) {
+		Usuario usuario = usuarioService.findOne(usuarioId);
+		if (usuario == null) {
+			flash.addFlashAttribute("error", "El usuario no existe.");
+			return "redirect:/tarea/listar";
+		}
 
+		tarea.setUsuario(usuario); // Asociar la tarea al usuario
+
+		if (!file.isEmpty()) {
 			if (tarea.getId() != null && tarea.getId() > 0 && tarea.getImagen() != null
 					&& tarea.getImagen().length() > 0) {
-
 				cargarArchivoService.delete(tarea.getImagen());
 			}
 
@@ -116,26 +121,24 @@ public class TareaController {
 			try {
 				nombreUnicoFile = cargarArchivoService.copy(file);
 			} catch (IOException e) {
-
 				e.printStackTrace();
 			}
 
 			flash.addFlashAttribute("info", "Se ha subido con éxito '" + nombreUnicoFile + "'");
-
 			tarea.setImagen(nombreUnicoFile);
 		}
 
-		String mensajeFlash = (tarea.getId() != null) ? "tarea editada con éxito!"
-				: "Tarea creada con éxito!";
-
+		String mensajeFlash = (tarea.getId() != null) ? "Tarea editada con éxito!" : "Tarea creada con éxito!";
 		usuarioService.saveTarea(tarea);
 		status.setComplete();
 		flash.addFlashAttribute("success", mensajeFlash);
-		return "redirect:/tarea/listar";
+
+		return "redirect:/usuario/ver/{usuarioId}";
 	}
-	
+
 	/**
 	 * devuelve los detalles de una tarea
+	 * 
 	 * @param id
 	 * @param model
 	 * @param flash
@@ -157,9 +160,10 @@ public class TareaController {
 
 		return "tarea/ver";
 	}
-	
+
 	/**
 	 * elimina una tarea
+	 * 
 	 * @param id
 	 * @param flash
 	 * @return vista listar
@@ -179,8 +183,10 @@ public class TareaController {
 
 		return "redirect:/listar";
 	}
+
 	/**
 	 * crea un comentario en una tarea
+	 * 
 	 * @param comentario
 	 * @param tareaId
 	 * @param model
@@ -204,6 +210,10 @@ public class TareaController {
 		String username = auth.getName();
 
 		Usuario usuario = usuarioService.findByUsername(username);
+
+		String comentarioConSaltos = comentario.getContenido().replace("\n", "<br />");
+		comentario.setContenido(comentarioConSaltos); 
+
 		usuarioService.saveComentario(comentario, usuario, tarea);
 		flash.addFlashAttribute("success", "Comentario realizado con éxito!");
 
@@ -212,8 +222,10 @@ public class TareaController {
 
 		return "redirect:/tarea/ver/{tareaId}";
 	}
+
 	/**
 	 * elimina un comentario de la tarea
+	 * 
 	 * @param idComentario
 	 * @param idTarea
 	 * @param flash
@@ -237,5 +249,4 @@ public class TareaController {
 		return "redirect:/usuario/listar";
 	}
 
-	
 }

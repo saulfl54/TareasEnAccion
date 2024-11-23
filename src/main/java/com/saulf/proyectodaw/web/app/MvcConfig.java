@@ -8,12 +8,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
-	
+
 	/**
-	 * crea un controlador de recursos estáticos y añade una ubicación
-	 * para las imagenes subidas
+	 * crea un controlador de recursos estáticos y añade una ubicación para las
+	 * imagenes subidas
 	 */
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -27,7 +28,8 @@ public class MvcConfig implements WebMvcConfigurer {
 	}
 
 	/**
-	 * registra como componente Spring nuestro passwordEncoder para encriptar las contraseñas 
+	 * registra como componente Spring nuestro passwordEncoder para encriptar las
+	 * contraseñas
 	 * 
 	 * @return BCryptPasswordEncoder
 	 */
@@ -38,7 +40,8 @@ public class MvcConfig implements WebMvcConfigurer {
 	}
 
 	/**
-	 * añadimos un controlador parametrizable para la vista personalizada en el error 403
+	 * añadimos un controlador parametrizable para la vista personalizada en el
+	 * error 403
 	 */
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
@@ -46,6 +49,4 @@ public class MvcConfig implements WebMvcConfigurer {
 		registry.addViewController("/error_403").setViewName("/error/error_403");
 	}
 
-	
-	
 }

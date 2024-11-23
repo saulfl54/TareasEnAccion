@@ -10,13 +10,14 @@ import jakarta.persistence.Table;
 
 /**
  * clase entity Role
+ * 
  * @author saulf
  *
  */
 
 @Entity
 @Table(name = "roles")
-public class Role implements Serializable{
+public class Role implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,8 +27,6 @@ public class Role implements Serializable{
 
 	public Role() {
 	}
-	
-	
 
 	public Role(Long id, String nombre, String role) {
 		this.id = id;
@@ -61,4 +60,3 @@ public class Role implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 }
-

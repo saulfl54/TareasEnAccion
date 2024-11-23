@@ -9,17 +9,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.saulf.proyectodaw.web.app.models.dao.IRoleDao;
 import com.saulf.proyectodaw.web.app.models.entity.Role;
 
-
-
 /**
  * Clase servicio para los Roles
+ * 
  * @author saulf
  *
  */
 
 @Service
 public class RoleServiceImpl implements IRoleService {
-	
+
 	@Autowired
 	private IRoleDao roleDao;
 
@@ -32,6 +31,7 @@ public class RoleServiceImpl implements IRoleService {
 		return (List<Role>) roleDao.findAll();
 
 	}
+
 	/**
 	 * devuelve un rol
 	 */

@@ -15,12 +15,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Clase service para imagenes
+ * 
  * @author saulf
  *
  */
 @Service
 public class CargarArchivoServiceImpl implements ICargarArchivoService {
-
 
 	private final static String DIRECTORIO_UPLOADS = "uploads";
 
@@ -40,7 +40,6 @@ public class CargarArchivoServiceImpl implements ICargarArchivoService {
 		String nombreUnicoFile = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
 		Path rootPath = getPath(nombreUnicoFile);
 
-
 		Files.copy(file.getInputStream(), rootPath);
 
 		return nombreUnicoFile;
@@ -48,8 +47,8 @@ public class CargarArchivoServiceImpl implements ICargarArchivoService {
 
 	@Override
 	public boolean delete(String filename) {
-		
-		File file =  getPath(filename).toFile();
+
+		File file = getPath(filename).toFile();
 
 		if (file.exists() && file.canRead()) {
 			if (file.delete()) {
@@ -64,13 +63,13 @@ public class CargarArchivoServiceImpl implements ICargarArchivoService {
 	}
 
 	@Override
-	public void deleteAll() {//borramos el directorio y todo lo que haya dentro
+	public void deleteAll() {// borramos el directorio y todo lo que haya dentro
 		FileSystemUtils.deleteRecursively(Paths.get(DIRECTORIO_UPLOADS).toFile());
 
 	}
 
 	@Override
-	public void init() throws IOException {//creamos nuevamente el directorio
+	public void init() throws IOException {// creamos nuevamente el directorio
 		Files.createDirectory(Paths.get(DIRECTORIO_UPLOADS));
 	}
 }

@@ -35,11 +35,12 @@
 							class="col-sm-3 col-form-label text-light text-right">Password</label>
 						<div class="col-sm-6">
 							<input type="password" th:field="*{password}" id="password"
-								class="form-control">	<small th:if="${#fields.hasErrors('password')}"
-							th:errors="*{password}" class="form-text text-danger"></small>
-								
+								class="form-control"> <small
+								th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+								class="form-text text-danger"></small>
+
 						</div>
-					
+
 
 					</div>
 
@@ -48,12 +49,14 @@
 						<label class="col-sm-3 col-form-label text-light text-right">Roles</label>
 						<div th:each="role: ${listaRoles}">
 							<input class="mx-2" type="checkbox" th:field="*{roles}"
-								th:value="${role.id}" th:errorclass="'form-control alert-danger'" > <label
+								th:value="${role.id}"
+								th:errorclass="'form-control alert-danger'"> <label
 								th:for="${#ids.prev('roles')}" th:text="${role.nombre}"></label>&nbsp;&nbsp;
-									
+
 						</div>
-						<small th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}" class="form-text text-danger"></small>
-					
+						<small th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}"
+							class="form-text text-danger"></small>
+
 					</div>
 
 
@@ -101,10 +104,11 @@
 							<input type="file" name="file" class="form-control" />
 						</div>
 					</div>
-					
-						<!---------------------------HABILITAR------------------------------->
+
+					<!---------------------------HABILITAR------------------------------->
 					<div class="form-group row mx-2">
-						<label for="enabled" class="col-sm-3 col-form-label text-light text-right">Habilitar</label>
+						<label for="enabled"
+							class="col-sm-3 col-form-label text-light text-right">Habilitar</label>
 						<div class="row col-sm-4">
 							<input type="checkbox" id="enabled" th:field="*{enabled}"
 								class="form-control col-sm-1">

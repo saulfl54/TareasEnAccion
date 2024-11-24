@@ -35,11 +35,12 @@
 							class="col-sm-3 col-form-label text-light text-right">Password</label>
 						<div class="col-sm-6">
 							<input type="password" th:field="*{password}" id="password"
-								class="form-control">	<small th:if="${#fields.hasErrors('password')}"
-							th:errors="*{password}" class="form-text text-danger"></small>
-								
+								class="form-control"> <small
+								th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+								class="form-text text-danger"></small>
+
 						</div>
-					
+
 
 					</div>
 
@@ -48,12 +49,14 @@
 						<label class="col-sm-3 col-form-label text-light text-right">Roles</label>
 						<div th:each="role: ${listaRoles}">
 							<input class="mx-2" type="checkbox" th:field="*{roles}"
-								th:value="${role.id}" th:errorclass="'form-control alert-danger'" > <label
+								th:value="${role.id}"
+								th:errorclass="'form-control alert-danger'"> <label
 								th:for="${#ids.prev('roles')}" th:text="${role.nombre}"></label>&nbsp;&nbsp;
-									
+
 						</div>
-						<small th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}" class="form-text text-danger"></small>
-					
+						<small th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}"
+							class="form-text text-danger"></small>
+
 					</div>
 
 
@@ -101,10 +104,11 @@
 							<input type="file" name="file" class="form-control" />
 						</div>
 					</div>
-					
-						<!---------------------------HABILITAR------------------------------->
+
+					<!---------------------------HABILITAR------------------------------->
 					<div class="form-group row mx-2">
-						<label for="enabled" class="col-sm-3 col-form-label text-light text-right">Habilitar</label>
+						<label for="enabled"
+							class="col-sm-3 col-form-label text-light text-right">Habilitar</label>
 						<div class="row col-sm-4">
 							<input type="checkbox" id="enabled" th:field="*{enabled}"
 								class="form-control col-sm-1">
@@ -119,12 +123,23 @@
 				</form>
 				<!-----------------------FIN FORMULARIO--------------------->
 				<!--------------------BOTÓN VOLVER ------------------------>
-				<h4 class="card-title mx-5">
-					<a class="btn btn-outline-light px-5"
-						th:href="@{'/usuario/listar/'}" th:text="'&laquo; volver'"></a>
-				</h4>
+				<div class="row justify-content-start">
+					<div class="col-auto m-5">
+						<!-- Botón que usa JavaScript para ir a la última ruta -->
+						<button class="btn btn-outline-light px-5" onclick="goBack()">«
+							Volver</button>
+					</div>
+				</div>
 			</div>
 		</div>
-	</div>
-	<footer th:replace="plantilla/plantilla :: footer"></footer>
+		<script>
+			function goBack() {
+				if (document.referrer) {
+					window.history.back(); // Retrocede si hay una página anterior en el historial
+				} else {
+					window.location.href = "/usuario/listar"; // Redirige a una página predeterminada si no hay historial
+				}
+			}
+		</script>
+		<footer th:replace="plantilla/plantilla :: footer"></footer>
 </body>

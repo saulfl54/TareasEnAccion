@@ -30,24 +30,12 @@
 										th:text="'Editar'"></a>
 								</div>
 							</div>
-							<div class="col-lg-6"></div>
-							<div class="col-lg-6 text-right" style="padding-right: 40px;">
-								<a href="#" class="text-decoration-none text-primary"
-									th:href="@{'/usuario/ver/' + ${tarea.usuario.id}}"
-									th:text="'#' + ${tarea.usuario.username}"> </a>
-							</div>
 						</div>
 						<div class="card-body">
 							<div class="card social-prof bg-dark">
 								<div class="card-body">
 									<div class="wrapper">
 										<h2 th:text="${titulo}" class="text-warning text-start"></h2>
-										<div class="container">
-											<img class="img-fluid rounded mx-auto d-block"
-												style="width: 300px" th:if="${tarea.imagen != null}"
-												th:src="@{'/uploads/' + ${tarea.imagen}}"
-												th:alt="${tarea.imagen}" />
-										</div>
 										<p class="card-text text-light pt-2"
 											th:text="${tarea.contenido}"
 											th:if="${not #strings.isEmpty(tarea.contenido)}"></p>
@@ -69,7 +57,11 @@
 											</ul>
 										</div>
 									</div>
-
+									<div class="col-lg-12 text-right" style="padding-right: 40px;">
+										<a href="#" class="text-decoration-none text-primary"
+											th:href="@{'/usuario/ver/' + ${tarea.usuario.id}}"
+											th:text="'#' + ${tarea.usuario.username}"> </a>
+									</div>
 								</div>
 							</div>
 

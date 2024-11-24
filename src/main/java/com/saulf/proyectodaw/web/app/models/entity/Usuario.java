@@ -38,7 +38,10 @@ public class Usuario implements Serializable {
 	private Long id;
 	@Column(length = 30, unique = true)
 	private String username;
+	
 	@Column(length = 60)
+	@NotEmpty
+	@Size(min = 4)
 	private String password;
 
 	private Boolean enabled;

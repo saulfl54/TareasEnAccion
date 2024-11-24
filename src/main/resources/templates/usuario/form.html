@@ -132,14 +132,15 @@
 				</div>
 			</div>
 		</div>
-		<script>
-			function goBack() {
-				if (document.referrer) {
-					window.history.back(); // Retrocede si hay una página anterior en el historial
-				} else {
-					window.location.href = "/usuario/listar"; // Redirige a una página predeterminada si no hay historial
-				}
+	</div>
+	<script>
+		function goBack() {
+			if (document.referrer) {
+				window.history.back(); // Retrocede si hay una página anterior en el historial
+			} else {
+				window.location.href = "/usuario/listar"; // Redirige a una página predeterminada si no hay historial
 			}
-		</script>
-		<footer th:replace="plantilla/plantilla :: footer"></footer>
+		}
+	</script>
+	<footer th:replace="plantilla/plantilla :: footer"></footer>
 </body>

@@ -19,6 +19,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "tareas")
@@ -33,7 +34,8 @@ public class Tarea {
 	private Long id;
 
 	@NotEmpty
-	private String titulo;
+    @Size(max = 40, message = "El título no puede tener más de 40 caracteres")
+    private String titulo;
 
 	@NotEmpty
 	private String contenido;

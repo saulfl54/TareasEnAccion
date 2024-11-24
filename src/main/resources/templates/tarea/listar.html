@@ -16,7 +16,7 @@
 						<!----------------------------------TÍTULO ----------------------------------------------->
 
 						<div
-							class="card-header text-warning font-weight-bold N h2 text-center"
+							class="card-header text-warning font-weight-bold N h2 text-left"
 							th:text="${titulo}"></div>
 						<br>
 
@@ -31,15 +31,15 @@
 									<a class="d-flex w-100 justify-content-between"
 										th:href="@{/tarea/ver/} + ${tarea.id}"
 										th:text="'#TAREA - ' + ${tarea.id}"></a> <br>
-
-									<div class="d-flex w-100 justify-content-between">
-										<h4 class="mb-1" th:text="${tarea.titulo}"></h4>
+									<div class="d-flex w-100 justify-content-start">
+										<h4 class="mb-2" th:text="${tarea.titulo}"></h4>
+									</div>
+									<div class="d-flex w-100 justify-content-end">
 										<small class="text-muted"
 											th:text="${#dates.format(tarea.createAt, 'dd-MM-yyyy')}"></small>
 									</div>
 								</div>
-								<br>
-								<br>
+								<br> <br>
 							</div>
 
 							<div class="content">
@@ -47,10 +47,10 @@
 							</div>
 						</div>
 
-						<div class="row justify-content-center">
+						<div class="row justify-content-start">
 							<div class="col-auto m-5">
 								<a class="btn btn-outline-light px-5" th:href="@{'/index'}"
-									th:text="'Principal'"></a>
+									th:text="'&laquo; volver'"></a>
 							</div>
 						</div>
 					</div>

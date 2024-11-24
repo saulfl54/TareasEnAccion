@@ -123,12 +123,23 @@
 				</form>
 				<!-----------------------FIN FORMULARIO--------------------->
 				<!--------------------BOTÓN VOLVER ------------------------>
-				<h4 class="card-title mx-5">
-					<a class="btn btn-outline-light px-5"
-						th:href="@{'/usuario/listar/'}" th:text="'&laquo; volver'"></a>
-				</h4>
+				<div class="row justify-content-start">
+					<div class="col-auto m-5">
+						<!-- Botón que usa JavaScript para ir a la última ruta -->
+						<button class="btn btn-outline-light px-5" onclick="goBack()">«
+							Volver</button>
+					</div>
+				</div>
 			</div>
 		</div>
-	</div>
-	<footer th:replace="plantilla/plantilla :: footer"></footer>
+		<script>
+			function goBack() {
+				if (document.referrer) {
+					window.history.back(); // Retrocede si hay una página anterior en el historial
+				} else {
+					window.location.href = "/usuario/listar"; // Redirige a una página predeterminada si no hay historial
+				}
+			}
+		</script>
+		<footer th:replace="plantilla/plantilla :: footer"></footer>
 </body>

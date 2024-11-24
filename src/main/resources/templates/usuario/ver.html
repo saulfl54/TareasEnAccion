@@ -13,12 +13,12 @@
 				<div class="card bg-dark" style="border-radius: 1rem;">
 					<div class="card-body p-5">
 						<div
-							class="card-header text-warning font-weight-bold N h2 text-center"
+							class="card-header text-warning font-weight-bold N h2 text-left"
 							th:text="${usuario.username}"></div>
 						<h4 class="card-title text-center my-4">
 							<a sec:authorize="hasRole('ROLE_ADVANCED_USER')"
 								th:href="@{'/tarea/form/' + ${usuario.id}}"
-								class="btn btn-secondary d-block mx-auto">crear Tarea</a>
+								class="btn btn-secondary mx-auto">crear Tarea</a>
 						</h4>
 						<div class="card-body">
 							<div class="row">
@@ -69,7 +69,12 @@
 											th:text="${tarea.titulo}"></span></td>
 										<td style="text-align: right;"><small class="text-muted"
 											th:text="${#dates.format(tarea.createAt, 'dd-MM-yyyy')}"></small>
-											&nbsp;<a sec:authorize="hasRole('ROLE_ADVANCED_USER')"
+											&nbsp; <!-- Botón Editar --> <a
+											sec:authorize="hasRole('ROLE_ADVANCED_USER')"
+											class="btn btn-warning btn-sm"
+											th:href="@{'/tarea/form/' + ${tarea.usuario.id} + '/' + ${tarea.id}}"
+											th:text="'editar'"></a> &nbsp; <!-- Botón Eliminar --> <a
+											sec:authorize="hasRole('ROLE_ADVANCED_USER')"
 											class="btn btn-danger btn-sm"
 											th:href="@{'/tarea/eliminar/' + ${tarea.id}}"
 											th:text="'eliminar'"
@@ -80,14 +85,16 @@
 							</table>
 
 
+
 						</div>
 					</div>
 
-					<!-------------------------BOTÓN VOLVER ------------------------------------------------------->
-					<div class="row justify-content-center">
+					<!--------------------BOTÓN VOLVER ------------------------>
+					<div class="row justify-content-start">
 						<div class="col-auto m-5">
-							<a class="btn btn-outline-light px-5"
-								th:href="@{/usuario/listar}">Usuarios</a>
+							<!-- Botón que usa JavaScript para ir a la última ruta -->
+							<button class="btn btn-outline-light px-5" onclick="goBack()">«
+								Volver</button>
 						</div>
 					</div>
 					<br>
@@ -96,7 +103,15 @@
 			</div>
 		</div>
 	</div>
-
+	<script>
+		function goBack() {
+			if (document.referrer) {
+				window.history.back(); // Retrocede si hay una página anterior en el historial
+			} else {
+				window.location.href = "/usuario/listar"; // Redirige a una página predeterminada si no hay historial
+			}
+		}
+	</script>
 	<footer th:replace="plantilla/plantilla :: footer"></footer>
 
 </body>

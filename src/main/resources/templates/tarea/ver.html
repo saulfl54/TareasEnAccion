@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
@@ -12,20 +13,24 @@
 			<div class="col-12 md-8 col-lg-10 col-xl-12">
 				<div class="card bg-dark" style="border-radius: 1rem;">
 					<div sec:authorize="hasRole('ROLE_ADVANCED_USER')" class="dropdown">
-						<button class="btn btn-link dropdown-toggle" type="button"
+						<button class="btn btn-link btn-lg dropdown-toggle" type="button"
 							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							<i class="fa fa-ellipsis-h"></i>
 						</button>
 						<div class="row">
-							<div class="col-lg-6">
-								<div class="dropdown-menu dropdown-menu-right">
-									<div class="h6 dropdown-header text-center">
-										<a th:href="@{/tarea/eliminar}+'/'+ ${tarea.id}"
-											th:text="'eliminar'"
-											onclick="return confirm('Estás seguro que deseas eliminar la tarea?');"></a>
-									</div>
+							<div class="dropdown-menu dropdown-menu-right">
+								<div class="h6 dropdown-header text-center">
+									<a th:href="@{/tarea/eliminar}+'/'+ ${tarea.id}"
+										th:text="'eliminar'"
+										onclick="return confirm('Estás seguro que deseas eliminar la tarea?');"></a>
+								</div>
+								<div class="h6 dropdown-header text-center">
+									<a
+										th:href="@{'/tarea/form/' + ${tarea.usuario.id} + '/' + ${tarea.id}}"
+										th:text="'Editar'"></a>
 								</div>
 							</div>
+							<div class="col-lg-6"></div>
 							<div class="col-lg-6 text-right" style="padding-right: 40px;">
 								<a href="#" class="text-decoration-none text-primary"
 									th:href="@{'/usuario/ver/' + ${tarea.usuario.id}}"
@@ -36,7 +41,7 @@
 							<div class="card social-prof bg-dark">
 								<div class="card-body">
 									<div class="wrapper">
-										<h2 th:text="${titulo}" class="text-warning text-center"></h2>
+										<h2 th:text="${titulo}" class="text-warning text-start"></h2>
 										<div class="container">
 											<img class="img-fluid rounded mx-auto d-block"
 												style="width: 300px" th:if="${tarea.imagen != null}"
@@ -81,12 +86,13 @@
 												<div>
 													<textarea name="contenido" id="contenido"
 														class="form-control" rows="3"
-														placeholder="Añade tu comentario"></textarea>
+														placeholder="Añade tu comentario" oninput="checkComment()"></textarea>
 												</div>
 
 												<div class="form-group text-right">
 													<input type="submit" th:value="Comentar"
-														class="btn-sm btn-secondary mt-3" />
+														class="btn btn-sm btn-light mt-3 text-white"
+														id="commentButton" disabled />
 												</div>
 											</form>
 										</div>
@@ -144,10 +150,11 @@
 
 						<br> <br>
 						<!-- Botón de redirección -->
-						<div class="row justify-content-center">
+						<div class="row justify-content-start">
 							<div class="col-auto m-5">
-								<a class="btn btn-outline-light px-5"
-									th:href="@{'/tarea/listar'}" th:text="'Tareas'"></a>
+								<!-- Botón que usa JavaScript para ir a la última ruta -->
+								<button class="btn btn-outline-light px-5" onclick="goBack()">«
+									Volver</button>
 							</div>
 						</div>
 					</div>
@@ -157,6 +164,25 @@
 	</div>
 
 	<script>
+		// Función para habilitar o deshabilitar el botón de comentar
+		function checkComment() {
+			var commentText = document.getElementById("contenido").value;
+			var commentButton = document.getElementById("commentButton");
+
+			// Si el comentario tiene texto, habilitar el botón
+			if (commentText.trim().length > 0) {
+				commentButton.disabled = false;
+				// Cambiar las clases del botón cuando está habilitado
+				commentButton.classList.remove("btn-light", "text-white");
+				commentButton.classList.add("btn-secondary");
+			} else {
+				commentButton.disabled = true;
+				// Cambiar las clases del botón cuando está deshabilitado
+				commentButton.classList.remove("btn-secondary");
+				commentButton.classList.add("btn-light", "text-white");
+			}
+		}
+
 		function myFunction() {
 			var x = document.getElementById("comentarios");
 			var btn = document.getElementById("toggleCommentsBtn");
@@ -167,6 +193,14 @@
 			} else {
 				x.style.display = "none";
 				btn.textContent = "Ver comentarios";
+			}
+		}
+
+		function goBack() {
+			if (document.referrer) {
+				window.history.back(); // Retrocede si hay una página anterior en el historial
+			} else {
+				window.location.href = "/tarea/listar"; // Redirige a una página predeterminada si no hay historial
 			}
 		}
 	</script>

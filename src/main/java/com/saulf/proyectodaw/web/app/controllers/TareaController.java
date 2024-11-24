@@ -26,7 +26,6 @@ import com.saulf.proyectodaw.web.app.models.entity.Tarea;
 import com.saulf.proyectodaw.web.app.models.entity.Usuario;
 import com.saulf.proyectodaw.web.app.models.service.ICargarArchivoService;
 import com.saulf.proyectodaw.web.app.models.service.IUsuarioService;
-import com.saulf.proyectodaw.web.app.utils.Paginador;
 
 import jakarta.validation.Valid;
 
@@ -34,39 +33,23 @@ import jakarta.validation.Valid;
 @RequestMapping("/tarea")
 @SessionAttributes("tarea")
 public class TareaController {
+
 	@Autowired
 	private IUsuarioService usuarioService;
+
 	@Autowired
 	private ICargarArchivoService cargarArchivoService;
 
-	/**
-	 * 
-	 * devuelve la lista con todas las tareas
-	 * 
-	 * @param model
-	 * @return vista lista
-	 */
-
+	// Método para listar tareas
 	@RequestMapping(value = "/listar", method = RequestMethod.GET)
 	public String listar(Model model) {
-
 		List<Tarea> tareas = usuarioService.findAllOrderByIdDesc();
-
 		model.addAttribute("titulo", "Tareas");
-
 		model.addAttribute("tareas", tareas);
-
 		return "tarea/listar";
 	}
 
-	/**
-	 * devuelve el formulario para crear una tarea
-	 * 
-	 * @param usuarioId
-	 * @param model
-	 * @param flash
-	 * @return vista form
-	 */
+	// Método para crear una tarea
 	@GetMapping("/form/{usuarioId}")
 	public String crear(@PathVariable Long usuarioId, Model model, RedirectAttributes flash) {
 		Usuario usuario = usuarioService.findOne(usuarioId);
@@ -80,9 +63,85 @@ public class TareaController {
 		model.addAttribute("tarea", tarea);
 		model.addAttribute("titulo", "Crear Tarea");
 
+		// Construir la URL para el formulario para la creación
+		String formUrl = "/tarea/form/" + usuarioId; // Sin tareaId
+		model.addAttribute("formUrl", formUrl); // Pasamos la URL como atributo al modelo
+
 		return "tarea/form"; // Retorna la vista del formulario
 	}
 
+	// Método para editar una tarea
+	@GetMapping("/form/{usuarioId}/{tareaId}")
+	public String editar(@PathVariable Long usuarioId, @PathVariable Long tareaId, Model model,
+			RedirectAttributes flash) {
+		Usuario usuario = usuarioService.findOne(usuarioId);
+		if (usuario == null) {
+			flash.addFlashAttribute("error", "El usuario no existe.");
+			return "redirect:/usuario/listar";
+		}
+
+		Tarea tarea = usuarioService.findTareaById(tareaId);
+		if (tarea == null || !tarea.getUsuario().getId().equals(usuarioId)) {
+			flash.addFlashAttribute("error", "Tarea no encontrada o no pertenece a este usuario.");
+			return "redirect:/tarea/listar";
+		}
+
+		model.addAttribute("tarea", tarea);
+		model.addAttribute("titulo", "Editar Tarea");
+
+		// Construir la URL para el formulario para la edición
+		String formUrl = "/tarea/form/" + usuarioId + "/" + tareaId; // Incluimos tareaId
+		model.addAttribute("formUrl", formUrl); // Pasamos la URL como atributo al modelo
+
+		return "tarea/form";
+	}
+
+	// Método para guardar la tarea (crear/editar)
+	@PostMapping("/form/{usuarioId}/{tareaId}")
+	public String guardar(@Valid Tarea tarea, BindingResult result, Model model, RedirectAttributes flash,
+			SessionStatus status, @RequestParam("file") MultipartFile file, @PathVariable Long usuarioId,
+			@PathVariable Long tareaId) {
+
+		if (result.hasErrors()) {
+			model.addAttribute("titulo", "Editar Tarea");
+			return "tarea/form"; // Si hay errores, volvemos al formulario
+		}
+
+		Usuario usuario = usuarioService.findOne(usuarioId);
+		if (usuario == null) {
+			flash.addFlashAttribute("error", "El usuario no existe.");
+			return "redirect:/tarea/listar";
+		}
+
+		tarea.setUsuario(usuario);
+
+		// Manejo del archivo de imagen (si existe)
+		if (!file.isEmpty()) {
+			if (tarea.getId() != null && tarea.getId() > 0 && tarea.getImagen() != null
+					&& tarea.getImagen().length() > 0) {
+				cargarArchivoService.delete(tarea.getImagen());
+			}
+
+			String nombreUnicoFile = null;
+			try {
+				nombreUnicoFile = cargarArchivoService.copy(file);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			flash.addFlashAttribute("info", "Se ha subido con éxito '" + nombreUnicoFile + "'");
+			tarea.setImagen(nombreUnicoFile);
+		}
+
+		// Determinamos el mensaje según si es creación o edición
+		String mensajeFlash = (tarea.getId() != null) ? "Tarea editada con éxito!" : "Tarea creada con éxito!";
+		usuarioService.saveTarea(tarea);
+		status.setComplete(); // Limpiar la sesión
+
+		flash.addFlashAttribute("success", mensajeFlash);
+		return "redirect:/tarea/listar";
+	}
+	
 	/**
 	 * crea una tarea
 	 * 
@@ -212,7 +271,7 @@ public class TareaController {
 		Usuario usuario = usuarioService.findByUsername(username);
 
 		String comentarioConSaltos = comentario.getContenido().replace("\n", "<br />");
-		comentario.setContenido(comentarioConSaltos); 
+		comentario.setContenido(comentarioConSaltos);
 
 		usuarioService.saveComentario(comentario, usuario, tarea);
 		flash.addFlashAttribute("success", "Comentario realizado con éxito!");

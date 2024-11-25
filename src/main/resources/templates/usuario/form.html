@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="plantilla/plantilla :: head"></head>
@@ -47,19 +48,19 @@
 					<!-----------------------------ROL------------------------------------>
 					<div class="form-group row text-light text-right">
 						<label class="col-sm-3 col-form-label text-light text-right">Roles</label>
-						<div th:each="role: ${listaRoles}">
-							<input class="mx-2" type="checkbox" th:field="*{roles}"
-								th:value="${role.id}"
-								th:errorclass="'form-control alert-danger'"> <label
-								th:for="${#ids.prev('roles')}" th:text="${role.nombre}"></label>&nbsp;&nbsp;
-
+						<div class="col-sm-9 d-flex flex-wrap align-items-center">
+							<div th:each="role : ${listaRoles}"
+								class="form-check form-check-inline">
+								<input class="form-check-input mx-2" type="checkbox"
+									th:field="*{roles}" th:value="${role.id}" /> <label
+									class="form-check-label" th:for="*{roles}"
+									th:text="${role.nombre}"></label>
+							</div>
 						</div>
-						<small th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}"
-							class="form-text text-danger"></small>
-
+						<div class="col-sm-6" th:if="${#fields.hasErrors('roles')}">
+							<small class="form-text text-danger" th:errors="*{roles}"></small>
+						</div>
 					</div>
-
-
 
 					<!----------------------------NOMBRE ----------------------------------------------->
 					<div class="form-group row">
@@ -97,7 +98,7 @@
 
 					<!-----------------------------FOTO--------------------------------->
 
-					<div class="form-group row">
+					<div class="form-group row d-none">
 						<label for="file"
 							class="col-sm-3 col-form-label text-light text-right">FOTO</label>
 						<div class="col-sm-6">
@@ -105,13 +106,13 @@
 						</div>
 					</div>
 
-					<!---------------------------HABILITAR------------------------------->
+					<!-- ---------------------------HABILITAR------------------------------->
 					<div class="form-group row mx-2">
 						<label for="enabled"
 							class="col-sm-3 col-form-label text-light text-right">Habilitar</label>
 						<div class="row col-sm-4">
 							<input type="checkbox" id="enabled" th:field="*{enabled}"
-								class="form-control col-sm-1">
+								class="form-check-input ml-3">
 						</div>
 					</div>
 
@@ -133,14 +134,62 @@
 			</div>
 		</div>
 	</div>
+
 	<script>
-		function goBack() {
-			if (document.referrer) {
-				window.history.back(); // Retrocede si hay una página anterior en el historial
-			} else {
-				window.location.href = "/usuario/listar"; // Redirige a una página predeterminada si no hay historial
+		document.addEventListener("DOMContentLoaded", function() {
+			// Obtener todos los checkboxes por su clase o selector
+			const checkboxes = document
+					.querySelectorAll('input[type="checkbox"]');
+
+			// Función para mostrar los IDs de los checkboxes cuando su estado cambie
+			function logCheckboxId(checkbox) {
+				if (checkbox.checked) {
+					console.log('Checkbox marcado: ' + checkbox.id);
+					if (checkbox.id == "roles3") {
+						document.getElementById("roles2").checked = true;
+						document.getElementById("roles1").checked = true;
+						console.log(document.getElementById("roles3").check);
+					}
+					if (checkbox.id == "roles2") {
+						document.getElementById("roles1").checked = true;
+						console.log('roles2 marcado');
+					}
+
+				} else {
+					console.log('Checkbox desmarcado: ' + checkbox.id);
+					if (checkbox.id == "roles3") {
+						console.log('roles3 desmarcado')
+
+					}
+					if (checkbox.id == "roles2") {
+						console.log('roles2 desmarcado');
+						document.getElementById("roles3").checked = false;
+					}
+					if (checkbox.id == "roles1") {
+						console.log('roles1 desmarcado');
+						document.getElementById("roles2").checked = false;
+						document.getElementById("roles3").checked = false;
+					}
+				}
 			}
-		}
+
+			// Añadir listener de cambio a cada checkbox
+			checkboxes.forEach(function(checkbox) {
+				checkbox.addEventListener('change', function() {
+					logCheckboxId(checkbox);
+				});
+			});
+
+			// Función para volver a la página anterior
+			function goBack() {
+				if (document.referrer) {
+					window.history.back();
+				} else {
+					window.location.href = "/usuario/listar"; // Página predeterminada
+				}
+			}
+		});
 	</script>
+
 	<footer th:replace="plantilla/plantilla :: footer"></footer>
 </body>

@@ -31,7 +31,6 @@
 
 									<!-- Botones alineados a la derecha -->
 									<div class="d-flex justify-content-end mt-2">
-										<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-warning btn-sm mr-2" th:href="@{/usuario/form/} + ${usuario.id}" th:text="'editar'"></a>
 										<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-danger btn-sm" th:href="@{/usuario/eliminar/} + ${usuario.id}" th:text="'eliminar'" onclick="return confirm('Estás seguro que deseas eliminar el usuario?');"></a>
 									</div>
 

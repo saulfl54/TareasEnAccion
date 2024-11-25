@@ -14,11 +14,14 @@
 					<div class="card-body p-5">
 						<div
 							class="card-header text-warning font-weight-bold h2 text-center"
-							th:text="${usuario.username}"></div>
+							th:text="'Usuario '+${usuario.username}"></div>
 						<h4 class="card-title text-center my-4">
 							<a sec:authorize="hasRole('ROLE_ADVANCED_USER')"
 								th:href="@{'/tarea/form/' + ${usuario.id}}"
-								class="btn btn-secondary mx-auto">Crear Tarea</a>
+								class="btn btn-secondary mx-auto">Crear Tarea</a><a
+								sec:authorize="hasRole('ROLE_ADMIN')"
+								class="btn btn-warning btn ml-2 text-white"
+								th:href="@{/usuario/form/} + ${usuario.id}" th:text="'Editar'"></a>
 						</h4>
 						<div class="card-body">
 							<div class="row">
@@ -28,7 +31,8 @@
 											<div
 												class="d-flex flex-column justify-content-center align-items-center">
 												<!---------------------MOSTRAR DATOS USUARIO ----------------------------------------------->
-												<ul class="list-group text-center w-75" style="min-height: 200px;">
+												<ul class="list-group text-center w-75"
+													style="min-height: 200px;">
 													<li class="list-group-item list"
 														th:text="'Nombre: ' + ${usuario.nombre}"></li>
 													<li class="list-group-item"
@@ -61,13 +65,9 @@
 											th:text="${tarea.titulo}"></span></td>
 										<td style="text-align: right;"><small class="text-muted"
 											th:text="${#dates.format(tarea.createAt, 'dd-MM-yyyy')}"></small>
-											&nbsp; <!-- Botón Editar --> <a
+											<!-- Botón Eliminar --> <a
 											sec:authorize="hasRole('ROLE_ADVANCED_USER')"
-											class="btn btn-warning btn-sm"
-											th:href="@{'/tarea/form/' + ${tarea.usuario.id} + '/' + ${tarea.id}}"
-											th:text="'editar'"></a> &nbsp; <!-- Botón Eliminar --> <a
-											sec:authorize="hasRole('ROLE_ADVANCED_USER')"
-											class="btn btn-danger btn-sm"
+											class="btn btn-danger btn-sm ml-2"
 											th:href="@{'/tarea/eliminar/' + ${tarea.id}}"
 											th:text="'eliminar'"
 											onclick="return confirm('Estás seguro que deseas eliminar la tarea?');"></a>
@@ -81,28 +81,18 @@
 					</div>
 
 					<!--------------------BOTÓN VOLVER ------------------------>
-					<div class="row justify-content-start">
-						<div class="col-auto m-5">
-							<!-- Botón que usa JavaScript para ir a la última ruta -->
-							<button class="btn btn-outline-light px-5" onclick="goBack()">«
-								Volver</button>
+						<div class="row justify-content-start">
+							<div class="col-auto m-5">
+								<a class="btn btn-outline-light px-5" th:href="@{'/usuario/listar'}"
+									th:text="'&laquo; volver'"></a>
+							</div>
 						</div>
-					</div>
 					<br>
 				</div>
 
 			</div>
 		</div>
 	</div>
-	<script>
-		function goBack() {
-			if (document.referrer) {
-				window.history.back(); // Retrocede si hay una página anterior en el historial
-			} else {
-				window.location.href = "/usuario/listar"; // Redirige a una página predeterminada si no hay historial
-			}
-		}
-	</script>
 	<footer th:replace="plantilla/plantilla :: footer"></footer>
 
 </body>

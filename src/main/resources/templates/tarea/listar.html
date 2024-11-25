@@ -37,6 +37,12 @@
 									<div class="d-flex w-100 justify-content-end">
 										<small class="text-muted"
 											th:text="${#dates.format(tarea.createAt, 'dd-MM-yyyy')}"></small>
+										<!-- Botón Eliminar -->
+										<a sec:authorize="hasRole('ROLE_ADVANCED_USER')"
+											class="btn btn-danger btn-sm ml-3"
+											th:href="@{'/tarea/eliminar/' + ${tarea.id}}"
+											th:text="'eliminar'"
+											onclick="return confirm('Estás seguro que deseas eliminar la tarea?');"></a>
 									</div>
 								</div>
 								<br> <br>

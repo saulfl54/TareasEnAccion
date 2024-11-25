@@ -53,6 +53,15 @@
 								th:errors="*{contenido}"></div>
 						</div>
 					</div>
+					<!-- -----------IMAGEN----------->
+					<div class="form-group row d-none">
+						<label for="file"
+							class="col-sm-3 col-form-label text-light text-right"
+							th:text="'Imagen'"></label>
+						<div class="col-sm-6">
+							<input type="file" name="file" class="form-control" />
+						</div>
+					</div>
 
 					<!-- -----------BOTÓN SUBMIT----------->
 					<div class="form-group row">
@@ -64,24 +73,15 @@
 				<!--------------------BOTÓN VOLVER ------------------------>
 				<div class="row justify-content-start">
 					<div class="col-auto m-5">
-						<button class="btn btn-outline-light px-5" onclick="goBack()">«
-							Volver</button>
+						<a class="btn btn-outline-light px-5"
+							th:href="@{'/usuario/ver/' + ${tarea.usuario.id}}"
+							th:text="'&laquo; Volver'"> </a>
 					</div>
 				</div>
+
 			</div>
 		</div>
 	</div>
 	<footer th:replace="plantilla/plantilla :: footer"></footer>
-
-	<script>
-		// Función para volver a la página anterior en el historial del navegador
-		function goBack() {
-			if (window.history.length > 1) {
-				window.history.back();
-			} else {
-				window.location.href = '/tarea/listar';
-			}
-		}
-	</script>
 </body>
 </html>

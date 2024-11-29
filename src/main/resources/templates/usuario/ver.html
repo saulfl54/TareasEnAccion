@@ -16,12 +16,14 @@
 							class="card-header text-warning font-weight-bold h2 text-center"
 							th:text="'Usuario '+${usuario.username}"></div>
 						<h4 class="card-title text-center my-4">
-							<a sec:authorize="hasRole('ROLE_ADVANCED_USER')"
-								th:href="@{'/tarea/form/' + ${usuario.id}}"
-								class="btn btn-secondary mx-auto">Crear Tarea</a><a
-								sec:authorize="hasRole('ROLE_ADMIN')"
+							<a sec:authorize="hasRole('ROLE_ADMIN')"
 								class="btn btn-warning btn ml-2 text-white"
 								th:href="@{/usuario/form/} + ${usuario.id}" th:text="'Editar'"></a>
+							<a sec:authorize="hasRole('ROLE_ADMIN')"
+								class="btn btn-danger btn"
+								th:href="@{/usuario/eliminar/} + ${usuario.id}"
+								th:text="'eliminar'"
+								onclick="return confirm('Estás seguro que deseas eliminar el usuario?');"></a>
 						</h4>
 						<div class="card-body">
 							<div class="row">
@@ -30,7 +32,7 @@
 										<div class="card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7">
 											<div
 												class="d-flex flex-column justify-content-center align-items-center">
-												<!---------------------MOSTRAR DATOS USUARIO ----------------------------------------------->
+												<!-- Mostrando Datos del Usuario -->
 												<ul class="list-group text-center w-75"
 													style="min-height: 200px;">
 													<li class="list-group-item list"
@@ -50,11 +52,22 @@
 								</div>
 							</div>
 
-							<!----------------------MOSTRAR TAREAS--------------------------------------------------->
+							<!-- Aquí va el botón de "Crear Tarea" centrado -->
+							<div class="row justify-content-center mb-4">
+								<div class="col-auto">
+									<a class="btn btn-secondary px-5"
+										th:href="@{'/tarea/form/' + ${usuario.id}}"
+										th:text="'Crear Tarea'"></a>
+								</div>
+							</div>
 
+							<!-- Mostrar Tareas -->
 							<div th:if="${#lists.isEmpty(usuario.tareas)}"
 								class="alert alert-info"
 								th:text="'No hay tareas asignadas en el usuario ' + ${usuario.nombre}"></div>
+
+
+							<!-- Lista de Tareas -->
 							<table th:if="${not #lists.isEmpty(usuario.tareas)}"
 								class="table table-striped my-4">
 								<tbody class="text-light">
@@ -76,18 +89,17 @@
 								</tbody>
 							</table>
 
-
 						</div>
 					</div>
 
-					<!--------------------BOTÓN VOLVER ------------------------>
-						<div class="row justify-content-start">
-							<div class="col-auto m-5">
-								<a class="btn btn-outline-light px-5" th:href="@{'/usuario/listar'}"
-									th:text="'&laquo; volver'"></a>
-							</div>
+					<!-- Botón de Volver -->
+					<div class="row justify-content-start">
+						<div class="col-auto m-5">
+							<a class="btn btn-outline-light px-5"
+								th:href="@{'/usuario/listar'}" th:text="'Listado de usuarios'"></a>
 						</div>
-					<br>
+					</div>
+
 				</div>
 
 			</div>

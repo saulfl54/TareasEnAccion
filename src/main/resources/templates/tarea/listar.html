@@ -14,7 +14,6 @@
 					<div class="card-body p-5 text-center">
 
 						<!----------------------------------TÍTULO ----------------------------------------------->
-
 						<div
 							class="card-header text-warning font-weight-bold N h2 text-left"
 							th:text="${titulo}"></div>
@@ -22,9 +21,15 @@
 
 						<div class="card-body">
 
-							<!------------- LISTADO DE TAREAS------------------------------------------>
+							<!------------- LISTADO DE TAREAS ------------------------------------------>
 
-							<div class="list-group">
+							<!-- Si la lista de tareas está vacía -->
+							<div class="alert alert-warning text-center" role="alert"
+								th:if="${#lists.isEmpty(tareas)}"
+								th:text="'No hay tareas en acción.'"></div>
+
+							<!-- Si hay tareas en la lista -->
+							<div class="list-group" th:if="${not #lists.isEmpty(tareas)}">
 								<div
 									class="list-group-item list-group-item-action flex-column align-items-start text-white bg-dark"
 									th:each="tarea : ${tareas}">
@@ -36,27 +41,23 @@
 									</div>
 									<div class="d-flex w-100 justify-content-end">
 										<small class="text-muted"
-											th:text="${#dates.format(tarea.createAt, 'dd-MM-yyyy')}"></small>
-										<!-- Botón Eliminar -->
-										<a sec:authorize="hasRole('ROLE_ADVANCED_USER')"
-											class="btn btn-danger btn-sm ml-3"
-											th:href="@{'/tarea/eliminar/' + ${tarea.id}}"
-											th:text="'eliminar'"
-											onclick="return confirm('Estás seguro que deseas eliminar la tarea?');"></a>
+											th:text="${#dates.format(tarea.createAt, 'dd-MM-yyyy')}"></small>									
 									</div>
 								</div>
-								<br> <br>
+								<br>
+								<br>
 							</div>
 
 							<div class="content">
-								<!--  <nav th:replace="plantilla/paginator-nav :: paginator"></nav>-->
+								<!-- Paginador si es necesario -->
+								<!-- <nav th:replace="plantilla/paginator-nav :: paginator"></nav> -->
 							</div>
 						</div>
 
 						<div class="row justify-content-start">
 							<div class="col-auto m-5">
 								<a class="btn btn-outline-light px-5" th:href="@{'/index'}"
-									th:text="'&laquo; volver'"></a>
+									th:text="'Menú principal'"></a>
 							</div>
 						</div>
 					</div>

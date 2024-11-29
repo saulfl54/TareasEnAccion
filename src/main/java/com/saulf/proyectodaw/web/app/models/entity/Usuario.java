@@ -186,6 +186,11 @@ public class Usuario implements Serializable {
 	public void addRoles(Role role) {
 		roles.add(role);
 	}
+	
+	public boolean isAdmin() {
+	    return roles.stream().anyMatch(role -> "Administrador".equals(role.getNombre()));
+	}
+
 
 	private static final long serialVersionUID = 1L;
 }

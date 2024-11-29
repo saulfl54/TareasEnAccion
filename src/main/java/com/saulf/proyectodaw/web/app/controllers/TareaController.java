@@ -236,11 +236,11 @@ public class TareaController {
 		if (tarea != null) {
 			usuarioService.deleteTarea(id);
 			flash.addFlashAttribute("success", "Tarea eliminada con éxito!");
-			return "redirect:/usuario/ver/" + tarea.getUsuario().getId();
+			return "redirect:/tarea/listar";
 		}
 		flash.addFlashAttribute("error", "No se pudo eliminar, no existe en la base de datos!");
 
-		return "redirect:/listar";
+		return "redirect:/tarea/listar";
 	}
 
 	/**

@@ -21,104 +21,216 @@ import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
+/**
+ * Clase que representa una tarea dentro del sistema. Esta entidad se mapea a la tabla "tareas" 
+ * en la base de datos y contiene la información relacionada con una tarea, como su título, 
+ * contenido, la imagen asociada, los comentarios relacionados y el usuario que creó la tarea.
+ * 
+ * Cada tarea puede tener múltiples comentarios y está asociada a un único usuario.
+ * 
+ * @author saulf
+ */
 @Entity
 @Table(name = "tareas")
 public class Tarea {
 
-	public Tarea() {
-		comentarios = new ArrayList<Comentario>();
-	}
+    /**
+     * Constructor por defecto. Inicializa la lista de comentarios.
+     */
+    public Tarea() {
+        comentarios = new ArrayList<Comentario>();
+    }
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    /**
+     * Identificador único de la tarea.
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@NotEmpty
-    @Size(max = 40, message = "El título no puede tener más de 40 caracteres")
+    /**
+     * Título de la tarea. No puede estar vacío y debe tener entre 7 y 40 caracteres.
+     */
+    @NotEmpty
+    @Size(min = 7, max = 40, message = "El título no puede tener más de 40 caracteres ni menos de 7")
     private String titulo;
 
-	@NotEmpty
-	private String contenido;
+    /**
+     * Contenido de la tarea. No puede estar vacío y debe tener entre 30 y 300 caracteres.
+     */
+    @NotEmpty
+    @Size(min = 30, max = 300)
+    private String contenido;
 
-	@Column(name = "imagen")
-	private String imagen;
+    /**
+     * Imagen asociada a la tarea.
+     */
+    @Column(name = "imagen")
+    private String imagen;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "usuario_id")
-	private Usuario usuario;
+    /**
+     * Usuario que creó la tarea. Relación con la entidad Usuario.
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "tarea_id") // Relación con Comentario
-	private List<Comentario> comentarios;
+    /**
+     * Lista de comentarios asociados a la tarea. Relación con la entidad Comentario.
+     */
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "tarea_id") // Relación con Comentario
+    private List<Comentario> comentarios;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name = "create_at")
-	private Date createAt;
+    /**
+     * Fecha en que se creó la tarea.
+     */
+    @Temporal(TemporalType.DATE)
+    @Column(name = "create_at")
+    private Date createAt;
 
-	@PrePersist
-	public void prePersist() {
-		createAt = new Date();
-	}
+    /**
+     * Método que se ejecuta antes de persistir la tarea para asignar la fecha de creación.
+     */
+    @PrePersist
+    public void prePersist() {
+        createAt = new Date();
+    }
 
-	public Long getId() {
-		return id;
-	}
+    /**
+     * Obtiene el identificador de la tarea.
+     * 
+     * @return El identificador único de la tarea.
+     */
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    /**
+     * Establece el identificador de la tarea.
+     * 
+     * @param id El identificador de la tarea.
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getTitulo() {
-		return titulo;
-	}
+    /**
+     * Obtiene el título de la tarea.
+     * 
+     * @return El título de la tarea.
+     */
+    public String getTitulo() {
+        return titulo;
+    }
 
-	public void setTitulo(String titulo) {
-		this.titulo = titulo;
-	}
+    /**
+     * Establece el título de la tarea.
+     * 
+     * @param titulo El título de la tarea.
+     */
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
 
-	public String getContenido() {
-		return contenido;
-	}
+    /**
+     * Obtiene el contenido de la tarea.
+     * 
+     * @return El contenido de la tarea.
+     */
+    public String getContenido() {
+        return contenido;
+    }
 
-	public void setContenido(String contenido) {
-		this.contenido = contenido;
-	}
+    /**
+     * Establece el contenido de la tarea.
+     * 
+     * @param contenido El contenido de la tarea.
+     */
+    public void setContenido(String contenido) {
+        this.contenido = contenido;
+    }
 
-	public String getImagen() {
-		return imagen;
-	}
+    /**
+     * Obtiene la imagen asociada a la tarea.
+     * 
+     * @return La imagen asociada a la tarea.
+     */
+    public String getImagen() {
+        return imagen;
+    }
 
-	public void setImagen(String imagen) {
-		this.imagen = imagen;
-	}
+    /**
+     * Establece la imagen asociada a la tarea.
+     * 
+     * @param imagen La imagen asociada a la tarea.
+     */
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
 
-	public List<Comentario> getComentarios() {
-		return comentarios;
-	}
+    /**
+     * Obtiene la lista de comentarios asociados a la tarea.
+     * 
+     * @return La lista de comentarios asociados a la tarea.
+     */
+    public List<Comentario> getComentarios() {
+        return comentarios;
+    }
 
-	public void setComentarios(List<Comentario> comentarios) {
-		this.comentarios = comentarios;
-	}
+    /**
+     * Establece los comentarios asociados a la tarea.
+     * 
+     * @param comentarios La lista de comentarios asociados a la tarea.
+     */
+    public void setComentarios(List<Comentario> comentarios) {
+        this.comentarios = comentarios;
+    }
 
-	public void addComentario(Comentario comentario) {
-		this.comentarios.add(comentario);
-	}
+    /**
+     * Añade un comentario a la lista de comentarios de la tarea.
+     * 
+     * @param comentario El comentario a añadir a la tarea.
+     */
+    public void addComentario(Comentario comentario) {
+        this.comentarios.add(comentario);
+    }
 
-	public Date getCreateAt() {
-		return createAt;
-	}
+    /**
+     * Obtiene la fecha de creación de la tarea.
+     * 
+     * @return La fecha de creación de la tarea.
+     */
+    public Date getCreateAt() {
+        return createAt;
+    }
 
-	public void setCreateAt(Date createAt) {
-		this.createAt = createAt;
-	}
+    /**
+     * Establece la fecha de creación de la tarea.
+     * 
+     * @param createAt La fecha de creación de la tarea.
+     */
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
+    }
 
-	public Usuario getUsuario() {
-		return usuario;
-	}
+    /**
+     * Obtiene el usuario que creó la tarea.
+     * 
+     * @return El usuario que creó la tarea.
+     */
+    public Usuario getUsuario() {
+        return usuario;
+    }
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
+    /**
+     * Establece el usuario que creó la tarea.
+     * 
+     * @param usuario El usuario que creó la tarea.
+     */
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 }

@@ -19,55 +19,62 @@ import com.saulf.proyectodaw.web.app.models.entity.Role;
 import com.saulf.proyectodaw.web.app.models.entity.Usuario;
 
 /**
- * Clase Service para cargar los datos del usuario
+ * Servicio para cargar los datos del usuario para la autenticación con Spring Security.
+ * Esta clase implementa la interfaz {@link UserDetailsService} y se encarga de cargar los datos
+ * del usuario (como su nombre, contraseña y roles) desde la base de datos.
  * 
  * @author saulf
- *
  */
-
 @Service
 public class UsuarioDetailsService implements UserDetailsService {
 
-	@Autowired
-	private IUsuarioDao usuarioDao;
+    @Autowired
+    private IUsuarioDao usuarioDao;
 
-	private Logger logger = LoggerFactory.getLogger(UsuarioDetailsService.class);
+    private Logger logger = LoggerFactory.getLogger(UsuarioDetailsService.class);
 
-	// con la misma transacción vamos a realizar la consulta del usuario y además
-	// vamos a obtener los roles
-	@Override
-	@Transactional(readOnly = true)
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    /**
+     * Carga los detalles de un usuario a partir de su nombre de usuario.
+     * Este método consulta la base de datos para obtener el usuario y sus roles. Si el usuario
+     * no existe o no tiene roles asignados, se lanzan excepciones correspondientes.
+     * 
+     * @param username El nombre de usuario del usuario a cargar.
+     * @return Un objeto {@link UserDetails} que contiene los detalles del usuario.
+     * @throws UsernameNotFoundException Si el usuario no existe o no tiene roles asignados.
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-		Usuario usuario = usuarioDao.findByUsername(username);
+        // Buscar al usuario por su nombre de usuario
+        Usuario usuario = usuarioDao.findByUsername(username);
 
-		if (usuario == null) {
-			logger.error("Error en el Login: el usuario '" + username + "' no existe!");
-			throw new UsernameNotFoundException("El usuario '" + username + "' no existe!");
-		}
+        // Si no se encuentra al usuario, se lanza una excepción
+        if (usuario == null) {
+            logger.error("Error en el Login: el usuario '" + username + "' no existe!");
+            throw new UsernameNotFoundException("El usuario '" + username + "' no existe!");
+        }
 
-		// creamos la lista de la implementación de SpringSecurity
-		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		// obtenemos los roles uno a uno y los guardamos en una lista
-		for (Role role : usuario.getRoles()) {
-			logger.info("Role: " + role.getRole());
-			authorities.add(new SimpleGrantedAuthority(role.getRole()));
-		}
+        // Crear la lista de autoridades (roles) para Spring Security
+        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 
-		if (authorities.isEmpty()) {
-			logger.error("Error en el Login: Usuario '" + username + "' no tiene roles asignados!");
-			throw new UsernameNotFoundException(
-					"Error en el Login: usuario '" + username + "' no tiene roles asignados!");
-		}
+        // Asignar los roles del usuario a las autoridades
+        for (Role role : usuario.getRoles()) {
+            logger.info("Role: " + role.getRole());
+            authorities.add(new SimpleGrantedAuthority(role.getRole()));
+        }
 
-		// le pasamos los datos con los roles ya del tipo de la implementación de
-		// SpringSecurity.
+        // Verificar si el usuario tiene roles asignados
+        if (authorities.isEmpty()) {
+            logger.error("Error en el Login: Usuario '" + username + "' no tiene roles asignados!");
+            throw new UsernameNotFoundException(
+                    "Error en el Login: usuario '" + username + "' no tiene roles asignados!");
+        }
 
-		// UserDetails es una interfaz que representa un Usuario autenticado
-		// new User(username, password, enabled, accountNonExpired,
-		// credentialsNonExpired, accountNonLocked, authorities)
-		return new User(usuario.getUsername(), usuario.getPassword(), usuario.getEnabled(), true, true, true,
-				authorities);
-	}
+        // Retornar el objeto UserDetails con los detalles del usuario y sus roles
+        // UserDetails es la interfaz que representa un usuario autenticado en Spring Security
+        return new User(usuario.getUsername(), usuario.getPassword(), usuario.getEnabled(), true, true, true,
+                authorities);
+    }
 
 }

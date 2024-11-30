@@ -13,34 +13,56 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
- * Clase que actua después del éxito en el login
+ * Clase que maneja el comportamiento después de un inicio de sesión exitoso.
+ * <p>
+ * Esta clase extiende {@link SimpleUrlAuthenticationSuccessHandler} para
+ * personalizar las acciones a realizar una vez que un usuario se autentica
+ * correctamente. Incluye la generación de mensajes flash que se pueden
+ * mostrar en la interfaz.
+ * 
+ * <p>
+ * Los mensajes flash son utilizados para proporcionar retroalimentación al
+ * usuario sobre el éxito del inicio de sesión.
  * 
  * @author saulf
- *
  */
 @Component
 public class ExitoLogin extends SimpleUrlAuthenticationSuccessHandler {
 
-	@Override
-	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-			Authentication authentication) throws IOException, ServletException {
+    /**
+     * Método que se ejecuta tras un inicio de sesión exitoso.
+     * <p>
+     * Este método personaliza la acción que se realiza después de que el
+     * usuario se autentica correctamente. Utiliza un {@link SessionFlashMapManager}
+     * para gestionar mensajes flash, que se pueden usar en vistas para informar
+     * al usuario sobre el estado del inicio de sesión.
+     * 
+     * @param request        La solicitud HTTP del cliente.
+     * @param response       La respuesta HTTP proporcionada por el servidor.
+     * @param authentication Objeto que contiene la información de autenticación del usuario.
+     * @throws IOException      Si ocurre un error de entrada/salida durante la operación.
+     * @throws ServletException Si ocurre un error relacionado con el servlet.
+     */
+    @Override
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+            Authentication authentication) throws IOException, ServletException {
 
-		/*
-		 * Usamos está forma porque no se puede inyectar como argumento en el método el
-		 * RedirectAttributes flash como se puede hacer en el controlador
-		 * 
-		 */
-		SessionFlashMapManager SesionFlashMapManager = new SessionFlashMapManager();
+        // Administrador de FlashMap para manejar mensajes temporales en la sesión
+        SessionFlashMapManager sessionFlashMapManager = new SessionFlashMapManager();
 
-		FlashMap flashMap = new FlashMap();
+        // Crear un FlashMap para almacenar mensajes flash
+        FlashMap flashMap = new FlashMap();
 
-		// hereda de HashMap. Usamos el objeto authentication que se pasa como argumento
-		// para mostrar el nombre
-		flashMap.put("success", "Hola " + authentication.getName() + ", su sesión ha sido iniciada!");
+        /*
+         * Se utiliza el objeto Authentication para obtener el nombre del usuario que
+         * inició sesión. Este nombre se incluye en el mensaje de éxito.
+         */
+        flashMap.put("success", "Hola " + authentication.getName() + ", su sesión ha sido iniciada!");
 
-		// lo guardamos en el SessionFlashMapManage junto con el request y el response
-		SesionFlashMapManager.saveOutputFlashMap(flashMap, request, response);
+        // Guardar el FlashMap en la sesión usando el administrador
+        sessionFlashMapManager.saveOutputFlashMap(flashMap, request, response);
 
-		super.onAuthenticationSuccess(request, response, authentication);
-	}
+        // Llamar al método de la superclase para completar el flujo de éxito de login
+        super.onAuthenticationSuccess(request, response, authentication);
+    }
 }

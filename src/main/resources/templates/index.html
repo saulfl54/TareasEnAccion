@@ -20,7 +20,7 @@
                             <p sec:authorize="isAuthenticated()" class="text-white-50 mb-5">
                                 <span sec:authorize="hasAuthority('ROLE_ADMIN')">Tienes permisos de administrador</span>
                                 <span sec:authorize="hasAuthority('ROLE_ADVANCED_USER') and !hasAuthority('ROLE_ADMIN')">Tienes permisos de usuario avanzado</span>
-                                <span sec:authorize="hasAuthority('ROLE_USER') and !hasAuthority('ROLE_ADVANCED_USER') and !hasAuthority('ROLE_ADMIN')">Tienes permisos de usuario estándar</span>
+                                <span sec:authorize="hasAuthority('ROLE_USER') and !hasAuthority('ROLE_ADVANCED_USER') and !hasAuthority('ROLE_ADMIN')">Tienes permisos de usuario</span>
                             </p>
 
                             <!-- Botones de navegación -->

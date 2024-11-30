@@ -25,7 +25,7 @@
                     <div class="form-group row">
                         <label for="usuario" class="col-sm-3 col-form-label text-light text-right" th:text="'Usuario'"></label>
                         <div class="col-sm-6">
-                            <input name="usuario" th:value="${tarea.usuario.nombre} + ' ' + ${tarea.usuario.apellido}" class="form-control" disabled="disabled" />
+                            <input name="usuario" th:value="${tarea.usuario.username}" class="form-control" disabled="disabled" />
                         </div>
                     </div>
 

@@ -11,70 +11,73 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * Clase de configuración para la aplicación web.
- * 
- * Esta clase configura diversos aspectos relacionados con Spring MVC,
- * incluyendo la gestión de recursos estáticos, la encriptación de contraseñas y
- * el manejo de vistas personalizadas para errores específicos.
+ * <p>
+ * Proporciona configuraciones relacionadas con Spring MVC, como el manejo de
+ * recursos estáticos, la encriptación de contraseñas y la configuración de
+ * controladores de vistas personalizadas para errores.
+ * </p>
  * 
  * @author saulf
  */
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
 
-	/**
-	 * Configura el controlador para los recursos estáticos y añade una ubicación
-	 * para las imágenes subidas por los usuarios.
-	 * 
-	 * Se especifica que los archivos en el directorio "uploads" serán accesibles a
-	 * través de la URL "/uploads/**".
-	 * 
-	 * @param registry El registro de controladores de recursos para agregar el
-	 *                 controlador de recursos estáticos.
-	 */
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    /**
+     * Configura el controlador para el acceso a recursos estáticos.
+     * <p>
+     * Este método agrega un controlador para manejar archivos en el directorio
+     * "uploads", permitiendo que los archivos sean accesibles desde la URL
+     * "/uploads/**".
+     * </p>
+     * 
+     * @param registry el registro de controladores de recursos donde se agrega
+     *                 la configuración personalizada.
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
-		// Llama al método base de WebMvcConfigurer para mantener otros controladores.
-		WebMvcConfigurer.super.addResourceHandlers(registry);
+        // Llama al método base para mantener la configuración predeterminada.
+        WebMvcConfigurer.super.addResourceHandlers(registry);
 
-		// Definir la ruta absoluta de las imágenes subidas.
-		String resourcePath = Paths.get("uploads").toAbsolutePath().toUri().toString();
+        // Ruta absoluta a la carpeta "uploads" donde se guardan los archivos subidos.
+        String resourcePath = Paths.get("uploads").toAbsolutePath().toUri().toString();
 
-		// Agregar la ruta para las imágenes subidas y registrarla en el registry.
-		registry.addResourceHandler("/uploads/**").addResourceLocations(resourcePath);
-	}
+        // Registra la ubicación de los recursos estáticos en el registro.
+        registry.addResourceHandler("/uploads/**").addResourceLocations(resourcePath);
+    }
 
-	/**
-	 * Registra el componente BCryptPasswordEncoder como un bean de Spring para la
-	 * encriptación de contraseñas.
-	 * 
-	 * Este bean se utilizará para encriptar las contraseñas de los usuarios de
-	 * manera segura utilizando el algoritmo bcrypt.
-	 * 
-	 * @return Una instancia del {@link BCryptPasswordEncoder} para encriptar
-	 *         contraseñas.
-	 */
-	@Bean
-	public static BCryptPasswordEncoder passwordEncoder() {
+    /**
+     * Declara un bean para la encriptación de contraseñas.
+     * <p>
+     * Este método expone una instancia de {@link BCryptPasswordEncoder} como un
+     * bean de Spring, que será utilizado en la aplicación para encriptar las
+     * contraseñas de forma segura usando el algoritmo bcrypt.
+     * </p>
+     * 
+     * @return una instancia de {@link BCryptPasswordEncoder}.
+     */
+    @Bean
+    public static BCryptPasswordEncoder passwordEncoder() {
 
-		// Retorna una nueva instancia de BCryptPasswordEncoder.
-		return new BCryptPasswordEncoder();
-	}
+        // Retorna una nueva instancia del codificador BCrypt.
+        return new BCryptPasswordEncoder();
+    }
 
-	/**
-	 * Registra un controlador de vistas personalizadas para el error 403.
-	 * 
-	 * Se asigna la vista "/error/error_403" a la URL "/error_403", lo que permite
-	 * que el sistema redirija a esta vista cuando se produzca un error de acceso no
-	 * autorizado (403).
-	 * 
-	 * @param registry El registro de controladores de vistas para agregar el
-	 *                 controlador de error 403.
-	 */
-	@Override
-	public void addViewControllers(ViewControllerRegistry registry) {
+    /**
+     * Configura un controlador de vistas personalizadas.
+     * <p>
+     * Este método asigna una vista específica para manejar errores de acceso no
+     * autorizado (403), redirigiendo al usuario a una página personalizada
+     * "/error/error_403".
+     * </p>
+     * 
+     * @param registry el registro de controladores de vistas donde se agrega la
+     *                 configuración para el error 403.
+     */
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
 
-		// Registrar la vista personalizada para el error 403.
-		registry.addViewController("/error_403").setViewName("/error/error_403");
-	}
+        // Registra la vista personalizada para errores de acceso no autorizado (403).
+        registry.addViewController("/error_403").setViewName("/error/error_403");
+    }
 }

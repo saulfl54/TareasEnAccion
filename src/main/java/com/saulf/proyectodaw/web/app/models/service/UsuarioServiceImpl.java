@@ -29,7 +29,9 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	private IComentarioDao comentarioDao;
 
 	/**
-	 * devuelve la lista de usuarios
+	 * Obtiene todos los usuarios registrados.
+	 * 
+	 * @return Lista de usuarios.
 	 */
 	@Override
 	@Transactional(readOnly = true)
@@ -38,19 +40,22 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	}
 
 	/**
-	 * guarda un usuario
+	 * Guarda un nuevo usuario o actualiza un usuario existente.
+	 * 
+	 * @param usuario El usuario a guardar o actualizar.
 	 */
 	@Override
 	@Transactional
 	public void save(Usuario usuario) {
 		usuarioDao.save(usuario);
-
 	}
 
 	/**
-	 * devuelve un usuario
+	 * Obtiene un usuario por su ID.
+	 * 
+	 * @param id El ID del usuario a buscar.
+	 * @return El usuario encontrado o null si no existe.
 	 */
-
 	@Override
 	@Transactional(readOnly = true)
 	public Usuario findOne(Long id) {
@@ -58,29 +63,32 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	}
 
 	/**
-	 * borra un usuario
+	 * Elimina un usuario por su ID.
+	 * 
+	 * @param id El ID del usuario a eliminar.
 	 */
-
 	@Override
 	@Transactional
 	public void delete(Long id) {
 		usuarioDao.deleteById(id);
-
 	}
 
 	/**
-	 * devuelve una lista paginada de usuarios
+	 * Obtiene una lista paginada de usuarios.
+	 * 
+	 * @param pageable El objeto Pageable que define la página y el tamaño de la lista.
+	 * @return Lista paginada de usuarios.
 	 */
-
 	@Override
 	@Transactional(readOnly = true)
 	public Page<Usuario> findAll(Pageable pageable) {
-
 		return usuarioDao.findAll(pageable);
 	}
 
 	/**
-	 * guarda una tarea
+	 * Guarda una tarea.
+	 * 
+	 * @param tarea La tarea a guardar.
 	 */
 	@Override
 	@Transactional
@@ -89,7 +97,10 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	}
 
 	/**
-	 * devuelve una tarea
+	 * Obtiene una tarea por su ID.
+	 * 
+	 * @param id El ID de la tarea a buscar.
+	 * @return La tarea encontrada o null si no existe.
 	 */
 	@Override
 	@Transactional(readOnly = true)
@@ -98,9 +109,10 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	}
 
 	/**
-	 * borra una tarea
+	 * Elimina una tarea por su ID.
+	 * 
+	 * @param id El ID de la tarea a eliminar.
 	 */
-
 	@Override
 	@Transactional
 	public void deleteTarea(Long id) {
@@ -108,15 +120,21 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	}
 
 	/**
-	 * devuelve una lista de tareas ordenada por fecha descendente
+	 * Obtiene todas las tareas ordenadas por fecha de creación de forma descendente.
+	 * 
+	 * @return Lista de tareas ordenadas por fecha de creación de forma descendente.
 	 */
-
 	@Override
 	@Transactional(readOnly = true)
 	public List<Tarea> findAllOrderByCreateAtDes() {
 		return tareaDao.findAllOrderByCreateAtDes();
 	}
 
+	/**
+	 * Obtiene todas las tareas ordenadas por ID de forma descendente.
+	 * 
+	 * @return Lista de tareas ordenadas por ID de forma descendente.
+	 */
 	@Override
 	@Transactional(readOnly = true)
 	public List<Tarea> findAllOrderByIdDesc() {
@@ -124,9 +142,11 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	}
 
 	/**
-	 * devuelve un usuario por su username
+	 * Obtiene un usuario por su nombre de usuario.
+	 * 
+	 * @param username El nombre de usuario a buscar.
+	 * @return El usuario encontrado o null si no existe.
 	 */
-
 	@Override
 	@Transactional(readOnly = true)
 	public Usuario findByUsername(String username) {
@@ -134,16 +154,18 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	}
 
 	/**
-	 * si es admin devuelve true
+	 * Verifica si un usuario tiene el rol de administrador.
+	 * 
+	 * @param id El ID del usuario a verificar.
+	 * @return True si el usuario tiene el rol de administrador, de lo contrario, false.
 	 */
-
 	@Override
 	@Transactional(readOnly = true)
 	public Boolean isAdmin(Long id) {
 		Usuario usuario = findOne(id);
 
+		// Verifica los roles del usuario
 		for (Role role : usuario.getRoles()) {
-
 			if (role.getRole().equals("ROLE_ADMIN"))
 				return true;
 		}
@@ -151,7 +173,10 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	}
 
 	/**
-	 * devuelve un comentario
+	 * Obtiene un comentario por su ID.
+	 * 
+	 * @param id El ID del comentario a buscar.
+	 * @return El comentario encontrado o null si no existe.
 	 */
 	@Override
 	@Transactional(readOnly = true)
@@ -160,21 +185,25 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	}
 
 	/**
-	 * guarda un comentario
+	 * Guarda un comentario asociado a un usuario y una tarea.
+	 * 
+	 * @param comentario El comentario a guardar.
+	 * @param usuario El usuario que realiza el comentario.
+	 * @param tarea La tarea asociada al comentario.
 	 */
 	@Override
 	@Transactional
 	public void saveComentario(Comentario comentario, Usuario usuario, Tarea tarea) {
-
 		comentario.setUsuario(usuario);
 		tarea.addComentario(comentario);
 		comentarioDao.save(comentario);
 	}
 
 	/**
-	 * borra un comentario
+	 * Elimina un comentario por su ID.
+	 * 
+	 * @param id El ID del comentario a eliminar.
 	 */
-
 	@Override
 	@Transactional
 	public void deleteComentario(Long id) {

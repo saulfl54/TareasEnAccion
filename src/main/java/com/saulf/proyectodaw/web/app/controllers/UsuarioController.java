@@ -40,242 +40,240 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.validation.Valid;
 
+/**
+ * Controlador de la entidad Usuario, encargado de manejar las operaciones CRUD 
+ * y la gestión de archivos asociados a los usuarios.
+ * <p>Autor: Saulf</p>
+ */
 @Controller
 @RequestMapping("usuario")
 @SessionAttributes("usuario")
 public class UsuarioController {
-	@Autowired
-	private IUsuarioService usuarioService;
 
-	@Autowired
-	private ICargarArchivoService cargarArchivoService;
+    @Autowired
+    private IUsuarioService usuarioService;
 
-	@Autowired
-	private IRoleService roleService;
+    @Autowired
+    private ICargarArchivoService cargarArchivoService;
 
-	@Autowired
-	private RolesEditor roleEditor;
+    @Autowired
+    private IRoleService roleService;
 
-	@Autowired
-	PasswordEncoder passwordEncoder;
+    @Autowired
+    private RolesEditor roleEditor;
 
-	/**
-	 * método para registrar los PropertyEditor
-	 * 
-	 * @param binder
-	 */
-	@InitBinder
-	public void initBinder(WebDataBinder binder) {
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-		binder.registerCustomEditor(Role.class, "roles", roleEditor);
-	}
+    /**
+     * Registra un PropertyEditor para convertir cadenas de texto en objetos de tipo Role.
+     * 
+     * @param binder El WebDataBinder utilizado para registrar el editor de roles.
+     */
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(Role.class, "roles", roleEditor);
+    }
 
-	/**
-	 * método que devuelve una lista páginada con todos los usuarios.
-	 * 
-	 * @param page
-	 * @param model
-	 * @return vista lista
-	 */
-	@RequestMapping(value = "/listar", method = RequestMethod.GET)
-	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
-		int size = 7;// cantidad a mostrar por pagina
-		Pageable pageRequest = PageRequest.of(page, size);
+    /**
+     * Muestra una lista de usuarios paginada.
+     * 
+     * @param page Número de página para la paginación.
+     * @param model Modelo para agregar atributos a la vista.
+     * @return Vista con la lista de usuarios.
+     */
+    @RequestMapping(value = "/listar", method = RequestMethod.GET)
+    public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
+        int size = 7; // Cantidad a mostrar por página
+        Pageable pageRequest = PageRequest.of(page, size);
 
-		Page<Usuario> usuarios = usuarioService.findAll(pageRequest);
-		// url,Page<Usuario>
-		Paginador<Usuario> pageRender = new Paginador<>("/usuario/listar", usuarios);
+        Page<Usuario> usuarios = usuarioService.findAll(pageRequest);
+        // Generar la paginación con la URL "/usuario/listar"
+        Paginador<Usuario> pageRender = new Paginador<>("/usuario/listar", usuarios);
 
-		model.addAttribute("titulo", "Usuarios");
-		model.addAttribute("page", pageRender);
-		model.addAttribute("usuarios", usuarios);
-		return "usuario/listar";
-	}
+        model.addAttribute("titulo", "Usuarios");
+        model.addAttribute("page", pageRender);
+        model.addAttribute("usuarios", usuarios);
+        return "usuario/listar";
+    }
 
-	/**
-	 * método que devuelve el formulario
-	 * 
-	 * @param model
-	 * @return vista form
-	 */
+    /**
+     * Muestra el formulario para crear un nuevo usuario.
+     * 
+     * @param model Modelo que se pasa a la vista.
+     * @return Vista del formulario para crear un usuario.
+     */
+    @RequestMapping(value = "/form")
+    public String crear(Map<String, Object> model) {
+        Usuario usuario = new Usuario();
+        model.put("usuario", usuario);
+        model.put("titulo", "Formulario de Usuario");
+        return "usuario/form";
+    }
 
-	@RequestMapping(value = "/form")
-	public String crear(Map<String, Object> model) {
+    /**
+     * Muestra el formulario de edición de un usuario con los datos cargados.
+     * 
+     * @param id Identificador del usuario a editar.
+     * @param model Modelo que se pasa a la vista.
+     * @param flash Atributos de redirección para mensajes flash.
+     * @return Vista del formulario de edición.
+     */
+    @RequestMapping(value = "/form/{id}")
+    public String editar(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
+        Usuario usuario = null;
 
-		Usuario usuario = new Usuario();
-		model.put("usuario", usuario);
-		model.put("titulo", "Formulario de Usuario");
-		return "usuario/form";
-	}
+        if (id > 0) {
+            usuario = usuarioService.findOne(id);
+            if (usuario == null) {
+                flash.addFlashAttribute("error", "Usuario inexistente en la base de datos!");
+                return "redirect:/usuario/listar";
+            }
+        } else {
+            flash.addFlashAttribute("error", "El identificador del usuario no puede ser cero!");
+            return "redirect:/usuario/listar";
+        }
 
-	/**
-	 * método que devuelve el formulario con los datos del usuario
-	 * 
-	 * @param id
-	 * @param model
-	 * @param flash
-	 * @return vista form
-	 */
+        model.put("usuario", usuario);
+        model.put("titulo", "Editar Usuario");
+        return "usuario/form";
+    }
 
-	@RequestMapping(value = "/form/{id}")
-	public String editar(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
+    /**
+     * Crea o edita un usuario validando los campos y subiendo la foto asociada si es necesario.
+     * 
+     * @param usuario El objeto usuario con los datos del formulario.
+     * @param result Resultados de la validación del formulario.
+     * @param model Modelo que se pasa a la vista.
+     * @param flash Atributos de redirección para mensajes flash.
+     * @param status Estado de la sesión.
+     * @param foto Archivo de la foto de perfil del usuario.
+     * @return Redirige a la vista con el perfil del usuario creado o editado.
+     */
+    @RequestMapping(value = "/form", method = RequestMethod.POST)
+    public String guardar(@Valid Usuario usuario, BindingResult result, Model model, RedirectAttributes flash,
+            SessionStatus status, @RequestParam("file") MultipartFile foto) {
 
-		Usuario usuario = null;
+        if (result.hasErrors()) {
+            model.addAttribute("titulo", "Formulario de Usuario");
+            return "usuario/form";
+        }
 
-		if (id > 0) {
-			usuario = usuarioService.findOne(id);
+        if (!foto.isEmpty()) {
+            // Si es una edición de usuario, eliminar la foto anterior
+            if (usuario.getId() != null && usuario.getId() > 0 && usuario.getFoto() != null
+                    && usuario.getFoto().length() > 0) {
+                cargarArchivoService.delete(usuario.getFoto());
+            }
 
-			if (usuario == null) {
-				flash.addFlashAttribute("error", "Usuario inexistente en la base de datos!");
-				return "redirect:/usuario/listar";
-			}
+            // Subir nueva foto
+            String nombreUnicoFile = null;
+            try {
+                nombreUnicoFile = cargarArchivoService.copy(foto);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-		} else {
-			flash.addFlashAttribute("error", "El identificador del usuario no puede ser cero!");
-			return "redirect:/usuario/listar";
-		}
-		model.put("usuario", usuario);
-		model.put("titulo", "Editar Usuario");
-		return "usuario/form";
-	}
+            flash.addFlashAttribute("info", "Se ha subido con éxito '" + nombreUnicoFile + "'");
+            usuario.setFoto(nombreUnicoFile);
+        }
 
-	/**
-	 * método que crear un usuario, validando previamente sus campos
-	 * 
-	 * @param usuario
-	 * @param result
-	 * @param model
-	 * @param flash
-	 * @param status
-	 * @param foto
-	 * @return vista form
-	 */
+        // Codificar la contraseña y guardar el usuario
+        String mensajeFlash = (usuario.getId() != null) ? "Usuario editado con éxito!" : "Usuario creado con éxito!";
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        usuarioService.save(usuario);
+        status.setComplete();
+        flash.addFlashAttribute("success", mensajeFlash);
 
-	@RequestMapping(value = "/form", method = RequestMethod.POST)
-	public String guardar(@Valid Usuario usuario, BindingResult result, Model model, RedirectAttributes flash,
-			SessionStatus status, @RequestParam("file") MultipartFile foto) {
-		if (result.hasErrors()) {
-			model.addAttribute("titulo", "Formulario de Usuario");
-			return "usuario/form";
-		}
+        return "redirect:/usuario/ver/" + usuario.getId();
+    }
 
-		if (!foto.isEmpty()) {
+    /**
+     * Elimina un usuario de la base de datos y la foto asociada si existe.
+     * 
+     * @param id Identificador del usuario a eliminar.
+     * @param flash Atributos de redirección para mensajes flash.
+     * @return Redirige a la lista de usuarios.
+     */
+    @RequestMapping(value = "/eliminar/{id}")
+    public String eliminar(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
 
-			if (usuario.getId() != null && usuario.getId() > 0 && usuario.getFoto() != null
-					&& usuario.getFoto().length() > 0) {
+        if (id > 0) {
+            Usuario usuario = usuarioService.findOne(id);
+            if (usuario == null) {
+                flash.addFlashAttribute("error", "Usuario inexistente en la base de datos!");
+                return "redirect:/usuario/listar";
+            }
 
-				cargarArchivoService.delete(usuario.getFoto());
-			}
+            // Verificar si el usuario es administrador y no permitir su eliminación
+            if (usuarioService.isAdmin(id)) {
+                flash.addFlashAttribute("success", "No se puede eliminar un usuario con rol Administrador");
+                return "redirect:/usuario/listar";
+            } else {
+                usuarioService.delete(id);
+                flash.addFlashAttribute("success", "Usuario eliminado con éxito!");
+            }
 
-			String nombreUnicoFile = null;
-			try {
-				nombreUnicoFile = cargarArchivoService.copy(foto);
-			} catch (IOException e) {
+            // Eliminar la foto si existe
+            if (usuario.getFoto() != null) {
+                if (cargarArchivoService.delete(usuario.getFoto())) {
+                    flash.addFlashAttribute("info", "Foto " + usuario.getFoto() + " eliminada con éxito!");
+                }
+            }
+        }
 
-				e.printStackTrace();
-			}
+        return "redirect:/usuario/listar";
+    }
 
-			flash.addFlashAttribute("info", "Se ha subido con éxito '" + nombreUnicoFile + "'");
+    /**
+     * Muestra la foto de perfil de un usuario.
+     * 
+     * @param filename Nombre del archivo de la foto.
+     * @return Responde con el archivo solicitado.
+     */
+    @GetMapping(value = "/uploads/{filename:.+}")
+    public ResponseEntity<Resource> verFoto(@PathVariable String filename) {
+        Resource recurso = null;
 
-			usuario.setFoto(nombreUnicoFile);
-		}
+        try {
+            recurso = cargarArchivoService.load(filename);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
 
-		String mensajeFlash = (usuario.getId() != null) ? "Usuario editado con éxito!" : "Usuario creado con éxito!";
-		usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
-		usuarioService.save(usuario);
-		status.setComplete();
-		flash.addFlashAttribute("success", mensajeFlash);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"")
+                .body(recurso);
+    }
 
-		return "redirect:/usuario/ver/" + usuario.getId();
-	}
+    /**
+     * Muestra los detalles de un usuario en su perfil.
+     * 
+     * @param id Identificador del usuario.
+     * @param model Modelo que se pasa a la vista.
+     * @param flash Atributos de redirección para mensajes flash.
+     * @return Vista con los detalles del usuario.
+     */
+    @GetMapping(value = "/ver/{id}")
+    public String ver(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
+        Usuario usuario = usuarioService.findOne(id);
+        if (usuario == null) {
+            flash.addFlashAttribute("error", "Usuario inexistente en la base de datos!");
+            return "redirect:/usuario/listar";
+        }
 
-	/**
-	 * método que elimina un usuario
-	 * 
-	 * @param id
-	 * @param flash
-	 * @return vista listar
-	 */
+        model.put("usuario", usuario);
+        model.put("titulo", "Perfil de " + usuario.getUsername());
+        return "usuario/ver";
+    }
 
-	@RequestMapping(value = "/eliminar/{id}")
-	public String eliminar(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
-
-		if (id > 0) {
-			Usuario usuario = usuarioService.findOne(id);
-			if (usuario == null) {
-				flash.addFlashAttribute("error", "Usuario inexistente en la base de datos!");
-				return "redirect:/usuario/listar";
-			}
-			if (usuarioService.isAdmin(id)) {
-
-				flash.addFlashAttribute("success", "No se puede eliminar un usuario con rol Administrador");
-				return "redirect:/usuario/listar";
-
-			} else {
-				usuarioService.delete(id);
-				flash.addFlashAttribute("success", "Usuario eliminado con éxito!");
-			}
-
-			if (usuario.getFoto() != null) {
-				if (cargarArchivoService.delete(usuario.getFoto())) {
-					flash.addFlashAttribute("info", "Foto " + usuario.getFoto() + " eliminada con éxito!");
-				}
-			}
-
-		}
-
-		return "redirect:/usuario/listar";
-	}
-
-	/**
-	 * método para mostrar una foto
-	 * 
-	 * @param filename
-	 * @return devuelve la respuesta con el recurso
-	 */
-
-	@GetMapping(value = "/uploads/{filename:.+}")
-	public ResponseEntity<Resource> verFoto(@PathVariable String filename) {
-
-		Resource recurso = null;
-
-		try {
-			recurso = cargarArchivoService.load(filename);
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"")
-				.body(recurso);
-	}
-
-	/**
-	 * método para ver los detalles del usuario.
-	 * 
-	 * @param id
-	 * @param model
-	 * @param flash
-	 * @return
-	 */
-
-	@GetMapping(value = "/ver/{id}")
-	public String ver(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
-
-		Usuario usuario = usuarioService.findOne(id);
-		if (usuario == null) {
-			flash.addFlashAttribute("error", "Usuario inexistente en la base de datos!");
-			return "redirect:/usuario/listar";
-		}
-
-		model.put("usuario", usuario);
-		model.put("titulo", "Perfil de " + usuario.getUsername());
-		return "usuario/ver";
-	}
-
-	@ModelAttribute("listaRoles")
-	public List<Role> listaRoles() {
-		return this.roleService.findAll();
-	}
+    /**
+     * Carga la lista de roles disponibles.
+     * 
+     * @return Lista de roles.
+     */
+    @ModelAttribute("listaRoles")
+    public List<Role> listaRoles() {
+        return this.roleService.findAll();
+    }
 }

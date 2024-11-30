@@ -1,0 +1,9 @@
+com.saulf.proyectodaw.web.app
+com.saulf.proyectodaw.web.app.auth
+com.saulf.proyectodaw.web.app.config
+com.saulf.proyectodaw.web.app.controllers
+com.saulf.proyectodaw.web.app.editor
+com.saulf.proyectodaw.web.app.models.dao
+com.saulf.proyectodaw.web.app.models.entity
+com.saulf.proyectodaw.web.app.models.service
+com.saulf.proyectodaw.web.app.utils

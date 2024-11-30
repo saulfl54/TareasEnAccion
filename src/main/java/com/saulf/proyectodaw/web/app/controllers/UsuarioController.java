@@ -185,7 +185,7 @@ public class UsuarioController {
 		usuarioService.save(usuario);
 		status.setComplete();
 		flash.addFlashAttribute("success", mensajeFlash);
-	
+
 		return "redirect:/usuario/ver/" + usuario.getId();
 	}
 
@@ -208,8 +208,8 @@ public class UsuarioController {
 			}
 			if (usuarioService.isAdmin(id)) {
 
-				flash.addFlashAttribute("success", "No se puede eliminar al Administrador");
-				return "redirect:/usuario/ver/{id}";
+				flash.addFlashAttribute("success", "No se puede eliminar un usuario con rol Administrador");
+				return "redirect:/usuario/listar";
 
 			} else {
 				usuarioService.delete(id);

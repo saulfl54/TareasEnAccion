@@ -1,87 +1,82 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="plantilla/plantilla :: head"></head>
+
 <body>
-	<header th:replace="plantilla/plantilla :: header"></header>
-	<div class="container py-1">
-		<div class="card bg-dark">
-			<!-----------------------------TÍTULO -------------------------------------->
-			<div
-				class="card-header text-warning font-weight-bold N h2 text-center"
-				th:text="${titulo}"></div>
-			<div class="card-body">
-				<!-----------------------FORMULARIO--------------------->
 
-				<form th:action="${formUrl}" th:object="${tarea}" method="post"
-					enctype="multipart/form-data">
+    <!-- Encabezado -->
+    <header th:replace="plantilla/plantilla :: header"></header>
 
-					<!-- -----------CAMPO DESHABILITADO NOMBRE CLIENTE----------->
-					<div class="form-group row">
-						<label for="usuario"
-							class="col-sm-3 col-form-label text-light text-right"
-							th:text="'Usuario'"></label>
-						<div class="col-sm-6">
-							<input name="usuario"
-								th:value="${tarea.usuario.nombre} + ' ' + ${tarea.usuario.apellido}"
-								class="form-control" disabled='disabled' />
-						</div>
-					</div>
+    <div class="container py-1">
 
-					<!-- -----------TÍTULO TAREA----------->
-					<div class="form-group row">
-						<label for="titulo"
-							class="col-sm-3 col-form-label text-light text-right"
-							th:text="'Título'"></label>
-						<div class="col-sm-6">
-							<input type="text" th:field="*{titulo}" class="form-control"
-								th:errorclass="'form-control is-invalid'" />
-							<div class="invalid-feedback"
-								th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
-						</div>
-					</div>
+        <!-- Card de la tarea -->
+        <div class="card bg-dark">
 
-					<!-- -----------CONTENIDO TAREA----------->
-					<div class="form-group row">
-						<label for="contenido"
-							class="col-sm-3 col-form-label text-light text-right"
-							th:text="'Contenido'"></label>
-						<div class="col-sm-6">
-							<textarea th:field="*{contenido}" class="form-control"
-								th:errorclass="'form-control is-invalid'"></textarea>
-							<div class="invalid-feedback"
-								th:if="${#fields.hasErrors('contenido')}"
-								th:errors="*{contenido}"></div>
-						</div>
-					</div>
-					<!-- -----------IMAGEN----------->
-					<div class="form-group row d-none">
-						<label for="file"
-							class="col-sm-3 col-form-label text-light text-right"
-							th:text="'Imagen'"></label>
-						<div class="col-sm-6">
-							<input type="file" name="file" class="form-control" />
-						</div>
-					</div>
+            <!-- Título de la tarea -->
+            <div class="card-header text-warning font-weight-bold N h2 text-center" th:text="${titulo}"></div>
 
-					<!-- -----------BOTÓN SUBMIT----------->
-					<div class="form-group row">
-						<input type="submit" th:value="${titulo}"
-							class="btn btn-secondary d-block mx-auto" />
-					</div>
-				</form>
+            <div class="card-body">
 
-				<!--------------------BOTÓN VOLVER ------------------------>
-				<div class="row justify-content-start">
-					<div class="col-auto m-5">
-						<a class="btn btn-outline-light px-5"
-							th:href="@{'/usuario/ver/' + ${tarea.usuario.id}}"
-							th:text="'&laquo; Volver'"> </a>
-					</div>
-				</div>
+                <!-- Formulario de tarea -->
+                <form th:action="${formUrl}" th:object="${tarea}" method="post" enctype="multipart/form-data">
 
-			</div>
-		</div>
-	</div>
-	<footer th:replace="plantilla/plantilla :: footer"></footer>
+                    <!-- Campo deshabilitado para el nombre del usuario -->
+                    <div class="form-group row">
+                        <label for="usuario" class="col-sm-3 col-form-label text-light text-right" th:text="'Usuario'"></label>
+                        <div class="col-sm-6">
+                            <input name="usuario" th:value="${tarea.usuario.nombre} + ' ' + ${tarea.usuario.apellido}" class="form-control" disabled="disabled" />
+                        </div>
+                    </div>
+
+                    <!-- Campo para el título de la tarea -->
+                    <div class="form-group row">
+                        <label for="titulo" class="col-sm-3 col-form-label text-light text-right" th:text="'Título'"></label>
+                        <div class="col-sm-6">
+                            <input type="text" th:field="*{titulo}" class="form-control" th:errorclass="'form-control is-invalid'" />
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
+                        </div>
+                    </div>
+
+                    <!-- Campo para el contenido de la tarea -->
+                    <div class="form-group row">
+                        <label for="contenido" class="col-sm-3 col-form-label text-light text-right" th:text="'Contenido'"></label>
+                        <div class="col-sm-6">
+                            <textarea th:field="*{contenido}" class="form-control" th:errorclass="'form-control is-invalid'"></textarea>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('contenido')}" th:errors="*{contenido}"></div>
+                        </div>
+                    </div>
+
+                    <!-- Campo de carga de imagen (oculto) -->
+                    <div class="form-group row d-none">
+                        <label for="file" class="col-sm-3 col-form-label text-light text-right" th:text="'Imagen'"></label>
+                        <div class="col-sm-6">
+                            <input type="file" name="file" class="form-control" />
+                        </div>
+                    </div>
+
+                    <!-- Botón de enviar formulario -->
+                    <div class="form-group row">
+                        <input type="submit" th:value="${titulo}" class="btn btn-secondary d-block mx-auto" />
+                    </div>
+                </form>
+
+                <!-- Botón para volver -->
+                <div class="row justify-content-start">
+                    <div class="col-auto m-5">
+                        <a class="btn btn-outline-light px-5" th:href="@{'/usuario/ver/' + ${tarea.usuario.id}}" th:text="'&laquo; Volver'"> </a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="plantilla/plantilla :: footer"></footer>
+
 </body>
+
 </html>

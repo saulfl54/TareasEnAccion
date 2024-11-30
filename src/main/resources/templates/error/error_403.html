@@ -3,34 +3,32 @@
 <head th:replace="plantilla/plantilla :: head"></head>
 <body>
 
-	<header th:replace="plantilla/plantilla :: header"></header>
+    <!-- Cabecera del sitio -->
+    <header th:replace="plantilla/plantilla :: header"></header>
 
-	<div class="container py-1">
+    <!-- Contenedor principal -->
+    <div class="container py-1">
+        <div class="card bg-dark text-center">
+            <div class="card-header text-warning font-weight-bold h2">
+                <h2>Acción Denegada</h2>
+            </div>
+            <div class="card-body text-white my-2">
+                <h4 class="card-title">
+                    Lo siento <span th:text="${#authentication.name}"></span>, no
+                    tienes suficientes permisos.
+                </h4>
 
-		<div class="card bg-dark text-center">
-			<div class="card-header text-warning font-weight-bold N h2">
-				<h2>Accion Denegada</h2>
-			</div>
-			<div class="card-body text-white my-2">
+                <h4 class="card-title text-center mt-3">
+                    <a th:href="@{/index}" class="btn btn-secondary d-block mx-5" role="button">
+                        Volver al inicio
+                    </a>
+                </h4>
+            </div>
+        </div>
+    </div>
 
-				<h4 class="card-title">
-					lo siento <span th:text="${#authentication.name}"></span>, No
-					tienes suficientes permisos!!!
+    <!-- Pie de página -->
+    <footer th:replace="plantilla/plantilla :: footer"></footer>
 
-				</h4>
-				<br>
-
-
-				<h4 class="card-title text-center">
-					<a th:href="@{/index}" class="btn btn-secondary d-block mx-5"
-						role="button">Volver al inicio</a>
-				</h4>
-
-
-			</div>
-		</div>
-	</div>
-
-	<footer th:replace="plantilla/plantilla :: footer"></footer>
 </body>
 </html>

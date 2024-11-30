@@ -40,14 +40,6 @@ public class TareaController {
 	@Autowired
 	private ICargarArchivoService cargarArchivoService;
 
-	// Método para listar tareas
-	@RequestMapping(value = "/listar", method = RequestMethod.GET)
-	public String listar(Model model) {
-		List<Tarea> tareas = usuarioService.findAllOrderByIdDesc();
-		model.addAttribute("titulo", "Tareas");
-		model.addAttribute("tareas", tareas);
-		return "tarea/listar";
-	}
 
 	// Método para crear una tarea
 	@GetMapping("/form/{usuarioId}")
@@ -83,7 +75,7 @@ public class TareaController {
 		Tarea tarea = usuarioService.findTareaById(tareaId);
 		if (tarea == null || !tarea.getUsuario().getId().equals(usuarioId)) {
 			flash.addFlashAttribute("error", "Tarea no encontrada o no pertenece a este usuario.");
-			return "redirect:/tarea/listar";
+			return "redirect:/usuario/listar";
 		}
 
 		model.addAttribute("tarea", tarea);
@@ -110,7 +102,7 @@ public class TareaController {
 		Usuario usuario = usuarioService.findOne(usuarioId);
 		if (usuario == null) {
 			flash.addFlashAttribute("error", "El usuario no existe.");
-			return "redirect:/tarea/listar";
+			return "redirect:/usuario/listar";
 		}
 
 		tarea.setUsuario(usuario);
@@ -139,7 +131,7 @@ public class TareaController {
 		status.setComplete(); // Limpiar la sesión
 
 		flash.addFlashAttribute("success", mensajeFlash);
-		return "redirect:/tarea/listar";
+		return "redirect:/tarea/ver/{tareaId}";
 	}
 	
 	/**
@@ -165,7 +157,7 @@ public class TareaController {
 		Usuario usuario = usuarioService.findOne(usuarioId);
 		if (usuario == null) {
 			flash.addFlashAttribute("error", "El usuario no existe.");
-			return "redirect:/tarea/listar";
+			return "redirect:/usuario/listar";
 		}
 
 		tarea.setUsuario(usuario); // Asociar la tarea al usuario
@@ -236,11 +228,11 @@ public class TareaController {
 		if (tarea != null) {
 			usuarioService.deleteTarea(id);
 			flash.addFlashAttribute("success", "Tarea eliminada con éxito!");
-			return "redirect:/tarea/listar";
+			return "redirect:/usuario/ver/" + tarea.getUsuario().getId();
 		}
 		flash.addFlashAttribute("error", "No se pudo eliminar, no existe en la base de datos!");
 
-		return "redirect:/tarea/listar";
+		return "redirect:/usuario/listar";
 	}
 
 	/**

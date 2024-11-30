@@ -1,25 +1,43 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="plantilla/plantilla :: head"></head>
+
 <body>
 
 	<header th:replace="plantilla/plantilla :: header"></header>
 
 	<div class="container py-1">
 
+		<!-- Card principal para el formulario -->
 		<div class="card bg-dark">
 
-			<!-----------------------------TÍTULO -------------------------------------->
-			<div
-				class="card-header text-warning font-weight-bold N h2 text-center"
+			<!-- Título -->
+			<div class="card-header text-warning font-weight-bold h2 text-center"
 				th:text="${titulo}"></div>
 			<div class="card-body">
 
-				<!-----------------------FORMULARIO--------------------->
+				<!-- Mensajes Flash -->
+				<div class="container py-3">
+					<!-- Mensaje de éxito -->
+					<div class="alert alert-success" th:if="${success != null}"
+						th:text="${success}"></div>
+					<!-- Mensaje de error -->
+					<div class="alert alert-danger" th:if="${error != null}"
+						th:text="${error}"></div>
+					<!-- Mensaje de advertencia -->
+					<div class="alert alert-warning" th:if="${warning != null}"
+						th:text="${warning}"></div>
+					<!-- Mensaje de información -->
+					<div class="alert alert-secondary" th:if="${info != null}"
+						th:text="${info}"></div>
+				</div>
+
+				<!-- Formulario -->
 				<form th:action="@{/usuario/form}" th:object="${usuario}"
 					method="post" enctype="multipart/form-data">
 
-					<!-- --------------------------USERNAME ---------------------------------->
+					<!-- Username -->
 					<div class="form-group row">
 						<label class="col-sm-3 col-form-label text-light text-right">Username</label>
 						<div class="col-sm-6">
@@ -30,7 +48,7 @@
 						</div>
 					</div>
 
-					<!----------------------------PASSWORD ---------------------------------->
+					<!-- Password -->
 					<div class="form-group row">
 						<label for="password"
 							class="col-sm-3 col-form-label text-light text-right">Password</label>
@@ -42,7 +60,7 @@
 						</div>
 					</div>
 
-					<!-----------------------------ROL------------------------------------>
+					<!-- Roles (solo si no es admin) -->
 					<div class="form-group row text-light text-right"
 						th:if="${not usuario.isAdmin()}">
 						<label class="col-sm-3 col-form-label text-light text-right">Roles</label>
@@ -60,7 +78,7 @@
 						</div>
 					</div>
 
-					<!-- ---------------------------NOMBRE---------------------------------->
+					<!-- Nombre -->
 					<div class="form-group row">
 						<label class="col-sm-3 col-form-label text-light text-right">Nombre</label>
 						<div class="col-sm-6">
@@ -71,7 +89,7 @@
 						</div>
 					</div>
 
-					<!------------------------------APELLIDO ------------------------------------->
+					<!-- Apellido -->
 					<div class="form-group row">
 						<label class="col-sm-3 col-form-label text-light text-right">Apellido</label>
 						<div class="col-sm-6">
@@ -82,7 +100,7 @@
 						</div>
 					</div>
 
-					<!-- ---------------------------EMAIL-------------------------------------->
+					<!-- Email -->
 					<div class="form-group row">
 						<label class="col-sm-3 col-form-label text-light text-right">Email</label>
 						<div class="col-sm-6">
@@ -93,7 +111,7 @@
 						</div>
 					</div>
 
-					<!-----------------------------FOTO---------------------------------->
+					<!-- Foto -->
 					<div class="form-group row d-none">
 						<label for="file"
 							class="col-sm-3 col-form-label text-light text-right">FOTO</label>
@@ -102,7 +120,7 @@
 						</div>
 					</div>
 
-					<!-- ---------------------------HABILITAR------------------------------->
+					<!-- Habilitar -->
 					<div class="form-group row mx-2" th:if="${not usuario.isAdmin()}">
 						<label for="enabled"
 							class="col-sm-3 col-form-label text-light text-right">Habilitar</label>
@@ -112,14 +130,14 @@
 						</div>
 					</div>
 
-					<!-------------------------BOTÓN SUBMIT--------------------------->
+					<!-- Botón Submit -->
 					<div class="form-group row">
 						<input type="submit" value="Guardar Usuario"
 							class="btn btn-secondary d-block mx-auto" />
 					</div>
 				</form>
 
-				<!--------------------BOTÓN VOLVER ------------------------>
+				<!-- Botón Volver -->
 				<div class="row justify-content-start">
 					<div class="col-auto m-5">
 						<a class="btn btn-outline-light px-5"
@@ -130,52 +148,44 @@
 		</div>
 	</div>
 
+	<!-- Script para gestionar checkboxes -->
 	<script>
 		document.addEventListener("DOMContentLoaded", function() {
-			// Obtener todos los checkboxes por su clase o selector
 			const checkboxes = document
 					.querySelectorAll('input[type="checkbox"]');
 
-			// Función para mostrar los IDs de los checkboxes cuando su estado cambie
 			function logCheckboxId(checkbox) {
 				if (checkbox.checked) {
-					console.log('Checkbox marcado: ' + checkbox.id);
+
 					if (checkbox.id == "roles3") {
 						document.getElementById("roles2").checked = true;
 						document.getElementById("roles1").checked = true;
-						console.log(document.getElementById("roles3").check);
 					}
 					if (checkbox.id == "roles2") {
 						document.getElementById("roles1").checked = true;
-						console.log('roles2 marcado');
 					}
-
 				} else {
-					console.log('Checkbox desmarcado: ' + checkbox.id);
 					if (checkbox.id == "roles3") {
-						console.log('roles3 desmarcado')
-
 					}
 					if (checkbox.id == "roles2") {
-						console.log('roles2 desmarcado');
 						document.getElementById("roles3").checked = false;
 					}
 					if (checkbox.id == "roles1") {
-						console.log('roles1 desmarcado');
 						document.getElementById("roles2").checked = false;
 						document.getElementById("roles3").checked = false;
 					}
 				}
 			}
 
-			// Añadir listener de cambio a cada checkbox
 			checkboxes.forEach(function(checkbox) {
 				checkbox.addEventListener('change', function() {
 					logCheckboxId(checkbox);
 				});
 			});
-
 		});
 	</script>
 
 	<footer th:replace="plantilla/plantilla :: footer"></footer>
+
+</body>
+</html>

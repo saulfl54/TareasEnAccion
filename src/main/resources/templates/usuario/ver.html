@@ -1,111 +1,126 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="plantilla/plantilla :: head"></head>
 <body>
 
-	<header th:replace="plantilla/plantilla :: header"></header>
+    <header th:replace="plantilla/plantilla :: header"></header>
 
-	<div class="container py-1 h-100">
-		<div
-			class="row d-flex justify-content-center align-items-center h-100">
-			<div class="col-12 md-8 col-lg-10 col-xl-12">
-				<div class="card bg-dark" style="border-radius: 1rem;">
-					<div class="card-body p-5">
-						<div
-							class="card-header text-warning font-weight-bold h2 text-center"
-							th:text="'Usuario '+${usuario.username}"></div>
-						<h4 class="card-title text-center my-4">
-							<a sec:authorize="hasRole('ROLE_ADMIN')"
-								class="btn btn-warning btn ml-2 text-white"
-								th:href="@{/usuario/form/} + ${usuario.id}" th:text="'Editar'"></a>
-							<a sec:authorize="hasRole('ROLE_ADMIN')"
-								class="btn btn-danger btn"
-								th:href="@{/usuario/eliminar/} + ${usuario.id}"
-								th:text="'eliminar'"
-								onclick="return confirm('Estás seguro que deseas eliminar el usuario?');"></a>
-						</h4>
-						<div class="card-body">
-							<div class="row">
-								<div class="col-lg-12 mb-4 mb-sm-5">
-									<div class="card card-style1 border-0 bg-dark">
-										<div class="card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7">
-											<div
-												class="d-flex flex-column justify-content-center align-items-center">
-												<!-- Mostrando Datos del Usuario -->
-												<ul class="list-group text-center w-75"
-													style="min-height: 200px;">
-													<li class="list-group-item list"
-														th:text="'Nombre: ' + ${usuario.nombre}"></li>
-													<li class="list-group-item"
-														th:text="'Apellido: ' + ${usuario.apellido}"></li>
-													<li class="list-group-item"
-														th:text="'Email: ' + ${usuario.email}"></li>
-													<li class="list-group-item"
-														th:text="'Alta: ' + ${#dates.format(usuario.createAt, 'dd-MM-yyyy')}"></li>
-													<li class="list-group-item"
-														th:text="'Estado: ' + (${usuario.enabled} ? 'Habilitado' : 'Deshabilitado')"></li>
-												</ul>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+    <div class="container py-1 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 md-8 col-lg-10 col-xl-12">
+                <div class="card bg-dark" style="border-radius: 1rem;">
+                    <div class="card-body p-5">
 
-							<!-- Aquí va el botón de "Crear Tarea" centrado -->
-							<div class="row justify-content-center mb-4">
-								<div class="col-auto">
-									<a class="btn btn-secondary px-5"
-										th:href="@{'/tarea/form/' + ${usuario.id}}"
-										th:text="'Crear Tarea'"></a>
-								</div>
-							</div>
+                        <!-- Título del usuario -->
+                        <div class="card-header text-warning font-weight-bold h2 text-center"
+                             th:text="'Usuario ' + ${usuario.username}"></div>
 
-							<!-- Mostrar Tareas -->
-							<div th:if="${#lists.isEmpty(usuario.tareas)}"
-								class="alert alert-info"
-								th:text="'No hay tareas asignadas en el usuario ' + ${usuario.nombre}"></div>
+                        <h4 class="card-title text-center my-4">
+                            <!-- Botones de edición y eliminación (solo visibles para admin) -->
+                            <a sec:authorize="hasRole('ROLE_ADMIN')" 
+                               class="btn btn-warning btn ml-2 text-white"
+                               th:href="@{/usuario/form/} + ${usuario.id}" th:text="'Editar usuario'"></a>
+                            <a sec:authorize="hasRole('ROLE_ADMIN')" 
+                               class="btn btn-danger btn"
+                               th:href="@{/usuario/eliminar/} + ${usuario.id}"
+                               th:text="'Eliminar usuario'"
+                               data-confirm="¿Estás seguro que deseas eliminar este usuario?">
+                            </a>
+                        </h4>
 
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-12 mb-4 mb-sm-5">
+                                    <div class="card card-style1 border-0 bg-dark">
+                                        <div class="card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7">
+                                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                                <!-- Datos del Usuario -->
+                                                <ul class="list-group text-center w-75" style="min-height: 200px;">
+                                                    <li class="list-group-item" th:text="'Nombre: ' + ${usuario.nombre}"></li>
+                                                    <li class="list-group-item" th:text="'Apellido: ' + ${usuario.apellido}"></li>
+                                                    <li class="list-group-item" th:text="'Email: ' + ${usuario.email}"></li>
+                                                    <li class="list-group-item" th:text="'Alta: ' + ${#dates.format(usuario.createAt, 'dd-MM-yyyy')}"></li>
+                                                    <li class="list-group-item" th:text="'Estado: ' + (${usuario.enabled} ? 'Habilitado' : 'Deshabilitado')"></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-							<!-- Lista de Tareas -->
-							<table th:if="${not #lists.isEmpty(usuario.tareas)}"
-								class="table table-striped my-4">
-								<tbody class="text-light">
-									<tr th:each="tarea : ${usuario.tareas}">
-										<td><a class="text-decoration-none text-primary"
-											th:href="@{'/tarea/ver/' + ${tarea.id}}"
-											th:text="'#TAREA - ' + ${tarea.id}"></a> &nbsp;&nbsp; <span
-											th:text="${tarea.titulo}"></span></td>
-										<td style="text-align: right;"><small class="text-muted"
-											th:text="${#dates.format(tarea.createAt, 'dd-MM-yyyy')}"></small>
-											<!-- Botón Eliminar --> <a
-											sec:authorize="hasRole('ROLE_ADVANCED_USER')"
-											class="btn btn-danger btn-sm ml-2"
-											th:href="@{'/tarea/eliminar/' + ${tarea.id}}"
-											th:text="'eliminar'"
-											onclick="return confirm('Estás seguro que deseas eliminar la tarea?');"></a>
-										</td>
-									</tr>
-								</tbody>
-							</table>
+                            <!-- Botón de crear tarea -->
+                            <div class="row justify-content-center mb-4">
+                                <div class="col-auto">
+                                    <a class="btn btn-secondary px-5"
+                                       th:href="@{'/tarea/form/' + ${usuario.id}}"
+                                       th:text="'Crear Tarea'"></a>
+                                </div>
+                            </div>
 
-						</div>
-					</div>
+                            <!-- Mostrar mensaje si no hay tareas asignadas -->
+                            <div th:if="${#lists.isEmpty(usuario.tareas)}"
+                                 class="alert alert-info"
+                                 th:text="'No hay tareas asignadas a este usuario.'"></div>
 
-					<!-- Botón de Volver -->
-					<div class="row justify-content-start">
-						<div class="col-auto m-5">
-							<a class="btn btn-outline-light px-5"
-								th:href="@{'/usuario/listar'}" th:text="'Listado de usuarios'"></a>
-						</div>
-					</div>
+                            <!-- Mostrar tabla de tareas si existen -->
+                            <table th:if="${not #lists.isEmpty(usuario.tareas)}"
+                                   class="table table-striped my-4">
+                                <tbody class="text-light">
+                                    <tr th:each="tarea : ${usuario.tareas}">
+                                        <td>
+                                            <a class="text-decoration-none text-primary"
+                                               th:href="@{'/tarea/ver/' + ${tarea.id}}"
+                                               th:text="'#TAREA - ' + ${tarea.id}"></a> &nbsp;&nbsp;
+                                            <span th:text="${tarea.titulo}"></span>
+                                        </td>
+                                        <td style="text-align: right;">
+                                            <small class="text-muted"
+                                                   th:text="${#dates.format(tarea.createAt, 'dd-MM-yyyy')}"></small>
+                                            <!-- Botón Eliminar tarea (solo visible para usuarios con rol avanzado) -->
+                                            <a sec:authorize="hasRole('ROLE_ADVANCED_USER')" 
+                                               class="btn btn-danger btn-sm ml-2"
+                                               th:href="@{'/tarea/eliminar/' + ${tarea.id}}"
+                                               th:text="'Eliminar'"
+                                               data-confirm="¿Estás seguro que deseas eliminar esta tarea?">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
 
-				</div>
+                        </div>
+                    </div>
 
-			</div>
-		</div>
-	</div>
-	<footer th:replace="plantilla/plantilla :: footer"></footer>
+                    <!-- Botón de Volver -->
+                    <div class="row justify-content-start">
+                        <div class="col-auto m-5">
+                            <a class="btn btn-outline-light px-5"
+                               th:href="@{'/usuario/listar'}" th:text="'Listado de usuarios'"></a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="plantilla/plantilla :: footer"></footer>
+
+    <script>
+        // Confirmación antes de eliminar usuario o tarea
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('[data-confirm]').forEach(function(element) {
+                element.addEventListener('click', function(event) {
+                    var message = element.getAttribute('data-confirm');
+                    if (!confirm(message)) {
+                        event.preventDefault(); // Cancela la acción si el usuario no confirma
+                    }
+                });
+            });
+        });
+    </script>
 
 </body>
 </html>

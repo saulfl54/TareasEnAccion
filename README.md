@@ -81,6 +81,9 @@ Antes de instalar, asegúrate de contar con los siguientes elementos:
 
 ### Interacción según roles
 Una vez autenticado, los usuarios tendrán acceso a funciones específicas basadas en sus permisos.
+El Administrador contará con control total sobre el sistema, lo que incluye la gestión de usuarios. 
+Los Usuarios Avanzados podrán gestionar las tareas
+Los Usuarios Estándar tendrán los permisos más básicos y solo podrán comentar, eliminar comentarios y visualizar las tareas asignadas.
 
 ---
 

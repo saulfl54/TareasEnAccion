@@ -25,6 +25,7 @@ Se trata de un proyecto educativo enfocado en entregar una primera versión func
 - Gestión de usuarios con roles:
   - Administrador: Control total sobre el sistema.
   - Usuario avanzado: Control sobre la gestión de tareas.
+  - Usuario: Básicos
 - Operaciones CRUD para usuarios y tareas.
 - Interfaz visual para asignación y seguimiento de tareas.
 - Integración con bases de datos para persistencia de datos.
@@ -78,6 +79,11 @@ Antes de instalar, asegúrate de contar con los siguientes elementos:
   - Usuario: `antoniojefe`
   - Contraseña: `1234`
   - Permisos: Gestión avanzada de tareas.
+
+- **Usuario **:
+  - Usuario: `marianocontable`
+  - Contraseña: `1234`
+  - Permisos: básicos.
 
 ### Interacción según roles
 Una vez autenticado, los usuarios tendrán acceso a funciones específicas basadas en sus permisos.
